@@ -1,0 +1,7 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/SharePointPOC/.vs/SharePointPOC/v15
+/SharePointPOC/SharePointPOC/bin/Debug
+/SharePointPOC/SharePointPOC/obj/Debug
