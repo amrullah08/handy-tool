@@ -39,11 +39,8 @@
         [LuisIntent("QNABase")]
         public async Task DownloadKnowledgeBase(IDialogContext context, LuisResult result)
         {
-
             var k = new QnAMakerService(new QnAMakerAttribute(WebConfigurationManager.AppSettings["QNAAuthKey"], WebConfigurationManager.AppSettings["QNAKnowledgeBaseId"], "Sorry Could not get that", .75, endpointHostName: WebConfigurationManager.AppSettings["QNAEndpointUrl"]));
             await context.Forward(new QnADialog(k), this.ResumeAfter, context.Activity, CancellationToken.None);
-
-            context.Wait(this.MessageReceived);
         }
 
         private async Task ResumeAfter(IDialogContext context, IAwaitable<object> result)
