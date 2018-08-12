@@ -4,14 +4,15 @@ using System.Linq;
 using System.Security;
 using System.Text;
 using System.Threading.Tasks;
+using System.Configuration;
 
 namespace SharePointPOC
 {
     public class SharepointCredentials
     {
-        public static string SharePointUrl= "";
-        public static string UserName = "";
-        public static string Password = "";
+        public static string SharePointUrl = ConfigurationSettings.AppSettings.Get("SharePointUrl");
+        public static string UserName = ConfigurationSettings.AppSettings.Get("UserName");
+        public static string Password = ConfigurationSettings.AppSettings.Get("Password");
 
         public static SecureString FetchPassword()
         {
