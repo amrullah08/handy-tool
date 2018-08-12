@@ -8,3 +8,14 @@
 /SharePointPOC/.vs/SharePointPOC/DesignTimeBuild
 /SharePointPOC/SharePointPOCLib/obj/Debug
 /SharePointPOC/SharePointPOCLib/bin/Debug
+/SharePointPOC/SharePointPOCLib/obj/Release
+/chevron/.vs
+/chevron/bin
+/chevron/obj
+/chevron/packages
+/chevron/Properties/PublishProfiles
+/SharepointPOCBot/.vs
+/SharepointPOCBot/bin
+/SharepointPOCBot/obj
+/SharepointPOCBot/packages
+/SharepointPOCBot/Properties/PublishProfiles
