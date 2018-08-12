@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SharePointPOC
 {
-    class SharepointRetriever
+    public class SharepointRetriever
     {
         public static void Retrieve()
         {

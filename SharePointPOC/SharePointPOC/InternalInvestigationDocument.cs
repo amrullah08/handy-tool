@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace SharePointPOC
 {
-    class InternalInvestigationDocument
+    public class InternalInvestigationDocument
     {
         ListItem listItem;
         public static List<InternalInvestigationDocument> InternalInvestigationDocuments = new List<InternalInvestigationDocument>();

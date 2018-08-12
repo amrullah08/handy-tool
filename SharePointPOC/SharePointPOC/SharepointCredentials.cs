@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SharePointPOC
 {
-    class SharepointCredentials
+    public class SharepointCredentials
     {
         public static string SharePointUrl= "";
         public static string UserName = "";

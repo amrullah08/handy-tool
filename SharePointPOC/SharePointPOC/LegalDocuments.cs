@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace SharePointPOC
 {
-    class LegalDocuments
+    public class LegalDocuments
     {
         ListItem listItem;
         public static List<LegalDocuments> Legaldocuments = new List<LegalDocuments>();
