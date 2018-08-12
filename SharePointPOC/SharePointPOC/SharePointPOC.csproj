@@ -44,16 +44,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="InternalInvestigationDocument.cs" />
-    <Compile Include="LegalDocuments.cs" />
-    <Compile Include="LitigationDocument.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SharepointCredentials.cs" />
-    <Compile Include="SharepointRetriever.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SharePointPOCLib\SharePointPOCLib.csproj">
+      <Project>{C768BEBC-3FA0-4513-9CB6-D2A7266B5AF8}</Project>
+      <Name>SharePointPOCLib</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
