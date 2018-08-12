@@ -48,11 +48,21 @@
             await result;
             context.Wait(this.MessageReceived);
         }
-        
+
         [LuisIntent("Help")]
         public async Task Help(IDialogContext context, LuisResult result)
         {
-            await context.PostAsync("Hi! Try asking me things like 'Litigation cases', 'Legal' or 'Internal investigation'");
+            var feedback = ((Activity)context.Activity).CreateReply("Hi! Try asking me things like 'Litigation cases', 'Legal' or 'Internal investigation'");
+            feedback.SuggestedActions = new SuggestedActions()
+            {
+                Actions = new List<CardAction>()
+                {
+                    new CardAction(){ Title = "preservation hold", Type=ActionTypes.PostBack, Value=$"1.)	How many documents are on preservation hold for this SP Online site?" },
+                    new CardAction(){ Title = "active litigation cases", Type=ActionTypes.PostBack, Value=$"2.)	How many active litigation cases did we receive between 1/1/2017 to 8/12/2018?" },
+                    new CardAction(){ Title = "internal investigation cases", Type=ActionTypes.PostBack, Value=$"3.)	How many substantiated internal investigation cases do we have in 2018?" }
+                }
+            };
+            await context.PostAsync(feedback);
 
             context.Wait(this.MessageReceived);
         }
