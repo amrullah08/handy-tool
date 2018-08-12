@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Configuration;
 
-namespace SharePointPOC
+namespace SharePointPOCLib
 {
     public class SharepointCredentials
     {
