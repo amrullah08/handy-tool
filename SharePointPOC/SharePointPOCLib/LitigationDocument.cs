@@ -23,6 +23,14 @@ namespace SharePointPOCLib
                 return (listItem.FieldValues["FileRef"]).ToString().Split('/').Last().ToString();
             }
         }
+        public string FileUrl
+        {
+            get
+            {
+                ///sites/ChrevronBot/Shared Documents/Sample Doc Legal Hold - PDF1.pdf
+                return SharepointCredentials.SharePointSite + (this.listItem.FieldValues["FileRef"].ToString());
+            }
+        }
 
         public DateTime DateTracking
         {

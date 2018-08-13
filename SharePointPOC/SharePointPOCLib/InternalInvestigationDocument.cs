@@ -17,6 +17,14 @@ namespace SharePointPOCLib
         {
             this.listItem = listItem;
         }
+        public string FileUrl
+        {
+            get
+            {
+                ///sites/ChrevronBot/Shared Documents/Sample Doc Legal Hold - PDF1.pdf
+                return SharepointCredentials.SharePointSite + (this.listItem.FieldValues["FileRef"].ToString());
+            }
+        }
 
         public int YearOfInternalInvestigation
         {
