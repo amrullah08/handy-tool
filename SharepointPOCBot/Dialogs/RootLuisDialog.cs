@@ -14,6 +14,7 @@
     using Microsoft.Bot.Builder.Luis.Models;
     using Microsoft.Bot.Connector;
     using Microsoft.Integration.Bot.Helpers;
+    using SharePointPOCBot.Cards;
     using SharePointPOCLib;
 
     [Serializable]
@@ -28,11 +29,11 @@
         public async Task None(IDialogContext context, LuisResult result)
         {
             string message = $"Sorry, I did not understand '{result.Query}'. Type 'help' if you need assistance.";
-
-
+            //IMessageActivity msg = context.MakeMessage();
+            //ResultCard searchCard = new ResultCard();
+            //searchCard.CustomCard(msg);
+            //await context.PostAsync(msg);
             await context.PostAsync(message);
-
-            context.Wait(this.MessageReceived);
         }
 
         
@@ -75,6 +76,10 @@
             context.SendTypingAcitivity();
             var itms = LegalDocuments.Legaldocuments;
             await context.PostAsync("There are " + itms.Where(cc => cc.OnPreservationHold).Count() + " documents are on preservation hold for this SP Online site");
+            var msg = context.MakeMessage();
+            ResultCard card = new ResultCard();
+            card.RenderLegalDocuments(msg, LegalDocuments.Legaldocuments);
+            await context.PostAsync(msg);
             context.Wait(this.MessageReceived);
         }
 
@@ -88,6 +93,12 @@
             context.SendTypingAcitivity();
             var itms = InternalInvestigationDocument.InternalInvestigationDocuments;
             await context.PostAsync("There are " + itms.Where(cc => cc.YearOfInternalInvestigation == Convert.ToInt32(obj.Entity)).Count() + " substantiated internal investigation cases");
+
+            var msg = context.MakeMessage();
+            ResultCard card = new ResultCard();
+            card.RenderInternalDocuments(msg, itms);
+            await context.PostAsync(msg);
+
             context.Wait(this.MessageReceived);
         }
 
@@ -106,6 +117,11 @@
             var itms = LitigationDocument.LitigationDocuments;
             var results = itms.Where(cc => cc.ActiveCase && (cc.DateTracking >= fromDate && cc.DateTracking <= toDate));
             await context.PostAsync("There are " + results.Count() + " substantiated internal investigation cases");
+
+            var msg = context.MakeMessage();
+            ResultCard card = new ResultCard();
+            card.RenderLitigationDocuments(msg, itms);
+            await context.PostAsync(msg);
 
             context.Wait(this.MessageReceived);
         }

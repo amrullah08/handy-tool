@@ -14,3 +14,6 @@
 /SharepointPOCBot/obj
 /SharepointPOCBot/packages
 /SharepointPOCBot/Properties/PublishProfiles
+/SharePointPOC/SharePointPOCLib/bin/Release
+/SharepointPOCBot/Web.Release.config
+/SharepointPOCBot/Web.Debug.config
