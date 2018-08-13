@@ -18,30 +18,18 @@ namespace SharePointPOCLib
             this.listItem = listItem;
         }
 
-
-
-        //        (listItem.FieldValues["FileRef"].ToString()).Replace(listItem.FieldValues["FileDirRef"].ToString(),"")
-        //"/Sample Doc Legal Hold - PDF1.pdf"
-        //(listItem.FieldValues["FileRef"].ToString()).Replace(listItem.FieldValues["FileDirRef"].ToString(),"").Replace("\\","")
-        //"/Sample Doc Legal Hold - PDF1.pdf"
-        //(listItem.FieldValues["FileRef"].ToString()).Replace(listItem.FieldValues["FileDirRef"].ToString(),"").Replace("/","")
-        //"Sample Doc Legal Hold - PDF1.pdf"
-        //listItem.FieldValues["FileDirRef"].ToString()
-        //"/sites/ChrevronBot/Shared Documents"
-
         public string Title
         {
             get
             {
-                ///sites/ChrevronBot/Shared Documents/Sample Doc Legal Hold - PDF1.pdf
                 return (this.listItem.FieldValues["FileRef"]).ToString().Split('/').Last().ToString();
             }
         }
+
         public string FileUrl
         {
             get
             {
-                ///sites/ChrevronBot/Shared Documents/Sample Doc Legal Hold - PDF1.pdf
                 return SharepointCredentials.SharePointSite + (this.listItem.FieldValues["FileRef"].ToString());
             }
         }
