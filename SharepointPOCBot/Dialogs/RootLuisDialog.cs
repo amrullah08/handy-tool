@@ -69,7 +69,8 @@
             LegalDocuments.RetrieveLegalDocuments();
             context.SendTypingAcitivity();
             var itms = LegalDocuments.Legaldocuments;
-            var res = "There are " + itms.Where(cc => cc.OnPreservationHold).Count() + " documents are on preservation hold";
+            itms = itms.Where(cc => cc.OnPreservationHold).ToList();
+            var res = "There are " + itms.Count() + " documents are on preservation hold";
 
             var attch = ResultCard.GetThumbnailCard(
                     "Legal Cases",
@@ -86,7 +87,7 @@
 
             msg = context.MakeMessage();
             ResultCard card = new ResultCard();
-            card.RenderLegalDocuments(msg, LegalDocuments.Legaldocuments);
+            card.RenderLegalDocuments(msg, itms);
             await context.PostAsync(msg);
             context.Wait(this.MessageReceived);
         }
@@ -100,7 +101,8 @@
             InternalInvestigationDocument.RetrieveInvestigation();
             context.SendTypingAcitivity();
             var itms = InternalInvestigationDocument.InternalInvestigationDocuments;
-            var res = "There are " + itms.Where(cc => cc.YearOfInternalInvestigation == Convert.ToInt32(obj.Entity)).Count() + " substantiated internal investigation cases";
+            itms = itms.Where(cc => cc.YearOfInternalInvestigation == Convert.ToInt32(obj.Entity)).ToList();
+            var res = "There are " + itms.Count() + " substantiated internal investigation cases";
 
             await context.PostAsync(res);
 
