@@ -1,6 +1,7 @@
 ﻿namespace SharePointPOCBot
 {
     using System;
+    using System.Collections.Generic;
     using System.Diagnostics;
     using System.Net;
     using System.Net.Http;
@@ -12,6 +13,7 @@
     using Microsoft.Bot.Builder.Luis;
     using Microsoft.Bot.Connector;
     using Services;
+    using SharePointPOCBot.Cards;
 
     [BotAuthentication]
     public class MessagesController : ApiController
@@ -65,6 +67,33 @@
                 // Handle conversation state changes, like members being added and removed
                 // Use Activity.MembersAdded and Activity.MembersRemoved and Activity.Action for info
                 // Not available in all channels
+                if (message.Type == ActivityTypes.ConversationUpdate)
+                {
+                    // Handle conversation state changes, like members being added and removed
+                    // Use Activity.MembersAdded and Activity.MembersRemoved and Activity.Action for info
+                    // Not available in all channels
+
+                    // Note: Add introduction here:
+                    IConversationUpdateActivity iConversationUpdated = message as IConversationUpdateActivity;
+                    if (iConversationUpdated != null)
+                    {
+                        ConnectorClient connector = new ConnectorClient(new System.Uri(message.ServiceUrl));
+
+                        foreach (var member in iConversationUpdated.MembersAdded ?? System.Array.Empty<ChannelAccount>())
+                        {
+                            // if the bot is added, then 
+                            if (member.Id == iConversationUpdated.Recipient.Id)
+                            {
+                                var reply = ((Activity)iConversationUpdated).CreateReply();
+                                reply.Attachments = new List<Attachment>();
+
+                                reply.Attachments.Add(ResultCard.ShowGreetingCard());
+                                reply.SuggestedActions = ResultCard.GetSuggestedActions();
+                                connector.Conversations.ReplyToActivityAsync(reply);
+                            }
+                        }
+                    }
+                }
             }
             else if (message.Type == ActivityTypes.ContactRelationUpdate)
             {

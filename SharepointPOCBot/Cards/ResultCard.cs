@@ -25,11 +25,11 @@ namespace SharePointPOCBot.Cards
                 };
 
                 cardButtons.Add(plButton);
-
+                var presrvData = (cardContent.OnPreservationHold) ? "Case is on Legal Hold" : "Case is not on Legal Hold";
                 HeroCard plCard = new HeroCard()
                 {
                     Title = $"{cardContent.Title}",
-                    Subtitle = $"{cardContent.OnPreservationHold}",
+                    Subtitle = $"{presrvData}",
                     Buttons = cardButtons
                 };
 
@@ -55,11 +55,11 @@ namespace SharePointPOCBot.Cards
                 };
 
                 cardButtons.Add(plButton);
-
+                var caseData = (cardContent.ActiveCase) ? "Case is Active " : "Case is not Active";
                 HeroCard plCard = new HeroCard()
                 {
                     Title = $"{cardContent.Title}",
-                    Subtitle = $"{cardContent.ActiveCase}",
+                    Subtitle = $"{caseData}",
                     Buttons = cardButtons
                 };
 
@@ -89,7 +89,7 @@ namespace SharePointPOCBot.Cards
                 HeroCard plCard = new HeroCard()
                 {
                     Title = $"{cardContent.Title}",
-                    Subtitle = $"{cardContent.YearOfInternalInvestigation}",
+                    Subtitle = $"Year of Investigation {cardContent.YearOfInternalInvestigation}",
                     Buttons = cardButtons
                 };
 
@@ -188,5 +188,99 @@ namespace SharePointPOCBot.Cards
                 message.Attachments.Add(attachment);
             }
         }
+
+        public static Attachment ShowGreetingCard()
+        {
+            AdaptiveContainer adaptiveContainer = new AdaptiveContainer();
+            AdaptiveColumnSet adaptiveColumnSet = new AdaptiveColumnSet();
+            AdaptiveColumn adaptiveColumn = new AdaptiveColumn()
+            {
+                Width = "auto",
+                Items = new List<AdaptiveElement>()
+                                {
+                                    new AdaptiveImage()
+                                    {
+                                        Url = new Uri("https://www.chevron.com/Assets/images/hallmark.png")
+                                    }
+                                }
+            };
+            adaptiveColumnSet.Columns.Add(adaptiveColumn);
+            adaptiveColumn = new AdaptiveColumn()
+            {
+                Width = "stretch",
+                Items = new List<AdaptiveElement>()
+                                {
+                                    new AdaptiveTextBlock()
+                                    {
+                                        Text = "I am The "+ System.Configuration.ConfigurationManager.AppSettings["Company"] + " Bot, One place to find all your legal, litigation and active investigation cases",
+                                        Weight = AdaptiveTextWeight.Bolder,
+                                        Wrap = true                                        
+                                    },
+                                    new AdaptiveTextBlock()
+                                    {
+                                        Text = "Please choose the categories below or ask questions",
+                                        Weight = AdaptiveTextWeight.Bolder,
+                                        Size = AdaptiveTextSize.Small,
+                                        Wrap = true
+                                    }
+                                }
+            };
+            adaptiveColumnSet.Columns.Add(adaptiveColumn);
+            adaptiveContainer.Items.Add(adaptiveColumnSet);
+
+            AdaptiveCard adaptiveCard = new AdaptiveCard();
+            adaptiveCard.Body.Add(adaptiveContainer);
+
+            Attachment attachment = new Attachment()
+            {
+                ContentType = AdaptiveCard.ContentType,
+                Content = adaptiveCard
+            };
+            return attachment;
+        }
+
+
+        private static Attachment GetHeroCard(string title, string subtitle, string text, CardImage cardImage, CardAction cardAction)
+        {
+            var heroCard = new HeroCard
+            {
+                Title = title,
+                Subtitle = subtitle,
+                Text = text,
+                Images = new List<CardImage>() { cardImage },
+                Buttons = new List<CardAction>() { cardAction },
+                
+            };
+
+            return heroCard.ToAttachment();
+        }
+
+        public static Attachment GetThumbnailCard(string title, string subtitle, string text, CardImage cardImage, CardAction cardAction)
+        {
+            var heroCard = new ThumbnailCard
+            {
+                Title = title,
+                Subtitle = subtitle,
+                Text = text,
+                Images = new List<CardImage>() { cardImage },
+                Buttons = new List<CardAction>() { cardAction },
+            };
+
+            return heroCard.ToAttachment();
+        }
+
+        public static SuggestedActions GetSuggestedActions()
+        {
+            return new SuggestedActions()
+            {
+                Actions = new List<CardAction>()
+                {
+                    new CardAction(){ Title = "preservation hold", Type=ActionTypes.PostBack, Value=$"How many documents are on preservation hold for this SP Online site?" },
+                    new CardAction(){ Title = "active litigation cases", Type=ActionTypes.PostBack, Value=$"How many active litigation cases did we receive between 1/1/2017 to 8/12/2018?" },
+                    new CardAction(){ Title = "internal investigation cases", Type=ActionTypes.PostBack, Value=$"How many substantiated internal investigation cases do we have in 2018?" }
+                }
+            };
+        }
+
     }
 }

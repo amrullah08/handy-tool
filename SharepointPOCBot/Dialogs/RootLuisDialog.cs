@@ -28,18 +28,19 @@
         [LuisIntent("None")]
         public async Task None(IDialogContext context, LuisResult result)
         {
-            string message = $"Sorry, I did not understand '{result.Query}'. Type 'help' if you need assistance.";
-            //IMessageActivity msg = context.MakeMessage();
-            //ResultCard searchCard = new ResultCard();
-            //searchCard.CustomCard(msg);
-            //await context.PostAsync(msg);
-            await context.PostAsync(message);
+            context.SendTypingAcitivity();
+            string message = $"Sorry, I did not understand {result.Query}. Here are few options.";
+            IMessageActivity msg = context.MakeMessage();
+            msg.Text = message;
+            msg.SuggestedActions = ResultCard.GetSuggestedActions();
+            await context.PostAsync(msg);
         }
 
         
         [LuisIntent("QNABase")]
         public async Task DownloadKnowledgeBase(IDialogContext context, LuisResult result)
         {
+            context.SendTypingAcitivity();
             var k = new QnAMakerService(new QnAMakerAttribute(WebConfigurationManager.AppSettings["QNAAuthKey"], WebConfigurationManager.AppSettings["QNAKnowledgeBaseId"], "Sorry Could not get that", .75, endpointHostName: WebConfigurationManager.AppSettings["QNAEndpointUrl"]));
             await context.Forward(new QnADialog(k), this.ResumeAfter, context.Activity, CancellationToken.None);
         }
@@ -53,16 +54,9 @@
         [LuisIntent("Help")]
         public async Task Help(IDialogContext context, LuisResult result)
         {
-            var feedback = ((Activity)context.Activity).CreateReply("Hi! Try asking me things like 'Litigation cases', 'Legal' or 'Internal investigation'");
-            feedback.SuggestedActions = new SuggestedActions()
-            {
-                Actions = new List<CardAction>()
-                {
-                    new CardAction(){ Title = "preservation hold", Type=ActionTypes.PostBack, Value=$"1.)	How many documents are on preservation hold for this SP Online site?" },
-                    new CardAction(){ Title = "active litigation cases", Type=ActionTypes.PostBack, Value=$"2.)	How many active litigation cases did we receive between 1/1/2017 to 8/12/2018?" },
-                    new CardAction(){ Title = "internal investigation cases", Type=ActionTypes.PostBack, Value=$"3.)	How many substantiated internal investigation cases do we have in 2018?" }
-                }
-            };
+            context.SendTypingAcitivity();
+            var feedback = ((Activity)context.Activity).CreateReply("Hi! Try asking me things like Litigation cases, Legal or Internal investigation");
+            feedback.SuggestedActions = ResultCard.GetSuggestedActions();
             await context.PostAsync(feedback);
 
             context.Wait(this.MessageReceived);
@@ -75,8 +69,22 @@
             LegalDocuments.RetrieveLegalDocuments();
             context.SendTypingAcitivity();
             var itms = LegalDocuments.Legaldocuments;
-            await context.PostAsync("There are " + itms.Where(cc => cc.OnPreservationHold).Count() + " documents are on preservation hold for this SP Online site");
-            var msg = context.MakeMessage();
+            var res = "There are " + itms.Where(cc => cc.OnPreservationHold).Count() + " documents are on preservation hold";
+
+            var attch = ResultCard.GetThumbnailCard(
+                    "Legal Cases",
+                    res,
+                    "Click below link to go the Sharepoint portal for Legal Cases",
+                    new CardImage(url: "http://technoinfotech.com/images/legal-hold-technoarchive.png"),
+                    new CardAction(ActionTypes.OpenUrl, "Learn More", value: "https://m365x844754.sharepoint.com/sites/ChrevronBot/Shared%20Documents/Forms/AllItems.aspx"));
+
+            IMessageActivity msg = context.MakeMessage();
+            msg.Attachments.Add(attch);
+            await context.PostAsync(msg);
+
+
+
+            msg = context.MakeMessage();
             ResultCard card = new ResultCard();
             card.RenderLegalDocuments(msg, LegalDocuments.Legaldocuments);
             await context.PostAsync(msg);
@@ -92,9 +100,23 @@
             InternalInvestigationDocument.RetrieveInvestigation();
             context.SendTypingAcitivity();
             var itms = InternalInvestigationDocument.InternalInvestigationDocuments;
-            await context.PostAsync("There are " + itms.Where(cc => cc.YearOfInternalInvestigation == Convert.ToInt32(obj.Entity)).Count() + " substantiated internal investigation cases");
+            var res = "There are " + itms.Where(cc => cc.YearOfInternalInvestigation == Convert.ToInt32(obj.Entity)).Count() + " substantiated internal investigation cases";
 
-            var msg = context.MakeMessage();
+            await context.PostAsync(res);
+
+            var attch = ResultCard.GetThumbnailCard(
+                    "Internal Investigation Cases",
+                    res,
+                    "Click below link to go the Sharepoint portal for Internal Investigation Case",
+                    new CardImage(url: "http://compliancestrategists.com/csblog/wp-content/uploads/2016/10/Investigation-300x195.jpg"),
+                    new CardAction(ActionTypes.OpenUrl, "Learn more", value: " https://m365x844754.sharepoint.com/sites/ChrevronBot/Lists/Internal%20Investigation%20Case%20Tracking/AllItems.aspx"));
+
+
+            IMessageActivity msg = context.MakeMessage();
+            msg.Attachments.Add(attch);
+            await context.PostAsync(msg);
+
+            msg = context.MakeMessage();
             ResultCard card = new ResultCard();
             card.RenderInternalDocuments(msg, itms);
             await context.PostAsync(msg);
@@ -116,9 +138,23 @@
             context.SendTypingAcitivity();
             var itms = LitigationDocument.LitigationDocuments;
             var results = itms.Where(cc => cc.ActiveCase && (cc.DateTracking >= fromDate && cc.DateTracking <= toDate));
-            await context.PostAsync("There are " + results.Count() + " substantiated internal investigation cases");
 
-            var msg = context.MakeMessage();
+            var dt = "There are " + results.Count() + " active litigation cases";
+
+            var attch = ResultCard.GetThumbnailCard(
+                    "Litigation cases",
+                    dt,
+                    "Click below link to go the Sharepoint portal for Litigation Case",
+                    new CardImage(url: "http://www.ipwatchdog.com/wp-content/uploads/2016/01/litigation-red-335.jpg"),
+                    new CardAction(ActionTypes.OpenUrl, "Learn more", value: "https://m365x844754.sharepoint.com/sites/ChrevronBot/LitigationCases/Forms/AllItems.aspx"));
+
+
+            IMessageActivity msg = context.MakeMessage();
+            msg.Attachments.Add(attch);
+            await context.PostAsync(msg);
+
+
+            msg = context.MakeMessage();
             ResultCard card = new ResultCard();
             card.RenderLitigationDocuments(msg, itms);
             await context.PostAsync(msg);
