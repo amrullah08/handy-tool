@@ -212,13 +212,13 @@ namespace SharePointPOCBot.Cards
                                 {
                                     new AdaptiveTextBlock()
                                     {
-                                        Text = "I am The "+ System.Configuration.ConfigurationManager.AppSettings["Company"] + " Bot, One place to find all your legal, litigation and active investigation cases",
+                                        Text = "I am The "+ System.Configuration.ConfigurationManager.AppSettings["Company"] + " Bot. One place to find all your legal, litigation and active investigation cases.",
                                         Weight = AdaptiveTextWeight.Bolder,
                                         Wrap = true                                        
                                     },
                                     new AdaptiveTextBlock()
                                     {
-                                        Text = "Please choose the categories below or ask questions",
+                                        Text = "Please choose the categories below or ask questions?",
                                         Weight = AdaptiveTextWeight.Bolder,
                                         Size = AdaptiveTextSize.Small,
                                         Wrap = true

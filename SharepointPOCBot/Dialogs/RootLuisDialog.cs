@@ -55,7 +55,7 @@
         public async Task Help(IDialogContext context, LuisResult result)
         {
             context.SendTypingAcitivity();
-            var feedback = ((Activity)context.Activity).CreateReply("Hi! Try asking me things like Litigation cases, Legal or Internal investigation");
+            var feedback = ((Activity)context.Activity).CreateReply("Hi! Try asking me questions on Litigation cases, Legal or Internal investigation or select below options");
             feedback.SuggestedActions = ResultCard.GetSuggestedActions();
             await context.PostAsync(feedback);
 
