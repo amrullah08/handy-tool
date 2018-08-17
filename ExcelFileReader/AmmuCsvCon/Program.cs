@@ -14,12 +14,12 @@ namespace AmmuCsvCon
 {
     class Program
     {
-        public static string connectionString = "dbconnection string";
-        public static string token = "aad token";
 
         static void Main(string[] args)
         {
             //ExcelProcessor.Process();
+            if (string.IsNullOrEmpty(ConfigurationConstants.ConnectionString) && string.IsNullOrEmpty(ConfigurationConstants.Token))
+                throw (new Exception("ConfigurationConstants not initialized"));
             ApiProcessor.Process();
         }
 

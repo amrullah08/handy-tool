@@ -25,7 +25,7 @@ namespace AmmuCsvCon
                         {
                             Console.WriteLine("id");
                         }
-                        using (SqlConnection con = new SqlConnection(Program.connectionString))
+                        using (SqlConnection con = new SqlConnection(ConfigurationConstants.ConnectionString))
                         {
                             con.Open();
                             using (SqlCommand com = new SqlCommand("InsertOrUpdateProject", con))

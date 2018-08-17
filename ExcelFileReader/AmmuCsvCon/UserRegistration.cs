@@ -24,7 +24,7 @@ namespace AmmuCsvCon
                     //dict.Add((j++).ToString(), k.Fields[aliasIndex]);
                     try
                     {
-                        using (SqlConnection con = new SqlConnection(Program.connectionString))
+                        using (SqlConnection con = new SqlConnection(ConfigurationConstants.ConnectionString))
                         {
                             con.Open();
                             using (SqlCommand com = new SqlCommand("InsertUsers", con))

@@ -66,7 +66,7 @@ namespace AmmuCsvCon
                 try
                 {
                     var url = string.Format(userUrl, offset, limit);
-                    var data = client.Get<dynamic>(new Uri(url), Program.token);
+                    var data = client.Get<dynamic>(new Uri(url), ConfigurationConstants.Token);
                     List<Hacker> k = Hacker.GetHackers(data.data);
                     if (k == null || k.Count == 0)
                         break;

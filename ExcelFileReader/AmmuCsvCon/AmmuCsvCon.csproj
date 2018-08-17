@@ -49,6 +49,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ConfigurationConstants.cs" />
     <Compile Include="ExcelProcessor.cs" />
     <Compile Include="ApiProcessor.cs" />
     <Compile Include="Hacker.cs" />

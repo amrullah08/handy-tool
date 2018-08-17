@@ -38,7 +38,7 @@ namespace AmmuCsvCon
                 try
                 {
                     var url = string.Format(projectUrl, offset, limit);
-                    var data = client.Get<dynamic>(new Uri(url), Program.token);
+                    var data = client.Get<dynamic>(new Uri(url), ConfigurationConstants.Token);
                     if (data != null)
                     {
                         var k = GetProjects(data.data);
