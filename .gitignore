@@ -17,3 +17,11 @@
 /SharePointPOC/SharePointPOCLib/bin/Release
 /SharepointPOCBot/Web.Release.config
 /SharepointPOCBot/Web.Debug.config
+/ExcelFileReader/.vs/CsvHelper/DesignTimeBuild
+/ExcelFileReader/.vs/CsvHelper/v15/Server/sqlite3
+/RavePOCBot/.vs
+/RavePOCBot/bin
+/RavePOCBot/obj
+/RavePOCBot/packages
+/RavePOCBot/Properties/PublishProfiles
+/ExcelFileReader/.vs/CsvHelper/v15
