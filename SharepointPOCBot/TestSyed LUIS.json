@@ -1,0 +1,339 @@
+{
+  "luis_schema_version": "3.0.0",
+  "versionId": "0.2",
+  "name": "TestSyed",
+  "desc": "",
+  "culture": "en-us",
+  "intents": [
+    {
+      "name": "DownloadKnowledgeBase"
+    },
+    {
+      "name": "Help"
+    },
+    {
+      "name": "InternalInvestigation"
+    },
+    {
+      "name": "Legal"
+    },
+    {
+      "name": "Litigation"
+    },
+    {
+      "name": "None"
+    },
+    {
+      "name": "QNABase"
+    },
+    {
+      "name": "Travel"
+    }
+  ],
+  "entities": [
+    {
+      "name": "AirportCode",
+      "roles": []
+    },
+    {
+      "name": "Hotel",
+      "roles": []
+    },
+    {
+      "name": "LitigationToDate",
+      "roles": []
+    },
+    {
+      "name": "name",
+      "roles": []
+    },
+    {
+      "name": "LitigationCase",
+      "children": [
+        "FromDay",
+        "FromMonth",
+        "FromYear",
+        "ToDay",
+        "ToMonth",
+        "ToYear"
+      ],
+      "roles": []
+    },
+    {
+      "name": "TravelLocation",
+      "children": [
+        "FromLocation",
+        "ToLocation"
+      ],
+      "roles": []
+    }
+  ],
+  "composites": [
+    {
+      "name": "LitigationCaseCompo",
+      "children": [
+        "LitigationCase::FromDay",
+        "LitigationCase::FromMonth",
+        "LitigationCase::FromYear",
+        "LitigationCase::ToYear",
+        "LitigationCase::ToDay",
+        "LitigationCase::ToMonth"
+      ],
+      "roles": []
+    },
+    {
+      "name": "LitigationEntityCompoFrom",
+      "children": [
+        "datetimeV2"
+      ],
+      "roles": []
+    },
+    {
+      "name": "LitigationEntityCompoTo",
+      "children": [
+        "datetimeV2"
+      ],
+      "roles": []
+    },
+    {
+      "name": "TravelComp",
+      "children": [
+        "TravelLocation::FromLocation",
+        "name",
+        "TravelLocation::ToLocation",
+        "TravelLocation"
+      ],
+      "roles": []
+    }
+  ],
+  "closedLists": [
+    {
+      "name": "vehicletype",
+      "subLists": [
+        {
+          "canonicalForm": "airline",
+          "list": []
+        },
+        {
+          "canonicalForm": "ship",
+          "list": []
+        },
+        {
+          "canonicalForm": "aircraft",
+          "list": []
+        },
+        {
+          "canonicalForm": "air passenger carrier",
+          "list": []
+        },
+        {
+          "canonicalForm": "vessel",
+          "list": []
+        }
+      ],
+      "roles": []
+    }
+  ],
+  "patternAnyEntities": [
+    {
+      "name": "nn",
+      "explicitList": [],
+      "roles": [
+        ".."
+      ]
+    }
+  ],
+  "regex_entities": [],
+  "prebuiltEntities": [
+    {
+      "name": "datetimeV2",
+      "roles": []
+    },
+    {
+      "name": "geography",
+      "roles": []
+    },
+    {
+      "name": "number",
+      "roles": []
+    }
+  ],
+  "model_features": [
+    {
+      "name": "Near",
+      "mode": true,
+      "words": "near,around,close,nearby",
+      "activated": true
+    },
+    {
+      "name": "Show",
+      "mode": true,
+      "words": "show,find,look,search",
+      "activated": true
+    },
+    {
+      "name": "travel",
+      "mode": true,
+      "words": "travel,ride,trips,book",
+      "activated": true
+    }
+  ],
+  "regex_features": [
+    {
+      "name": "AirportCodeRegex",
+      "pattern": "[a-z]{3}",
+      "activated": true
+    }
+  ],
+  "patterns": [
+    {
+      "pattern": "test {name}",
+      "intent": "Travel"
+    },
+    {
+      "pattern": "i am going to {TravelLocation::ToLocation} from {TravelLocation::FromLocation}",
+      "intent": "Travel"
+    },
+    {
+      "pattern": "book {name} {vehicletype} to go from {TravelComp} to {TravelComp}",
+      "intent": "Travel"
+    },
+    {
+      "pattern": "how many active litigation cases did we receive {datetimeV2}?",
+      "intent": "Litigation"
+    }
+  ],
+  "utterances": [
+    {
+      "text": "book airasia airline to go from kashmir to kanyakumari",
+      "intent": "Travel",
+      "entities": [
+        {
+          "entity": "TravelComp",
+          "startPos": 5,
+          "endPos": 11
+        },
+        {
+          "entity": "name",
+          "startPos": 5,
+          "endPos": 11
+        },
+        {
+          "entity": "TravelComp",
+          "startPos": 32,
+          "endPos": 38
+        },
+        {
+          "entity": "TravelLocation::ToLocation",
+          "startPos": 32,
+          "endPos": 38
+        },
+        {
+          "entity": "TravelComp",
+          "startPos": 43,
+          "endPos": 53
+        },
+        {
+          "entity": "TravelLocation::FromLocation",
+          "startPos": 43,
+          "endPos": 53
+        }
+      ]
+    },
+    {
+      "text": "help me",
+      "intent": "Help",
+      "entities": []
+    },
+    {
+      "text": "how do i find my windows product key?",
+      "intent": "DownloadKnowledgeBase",
+      "entities": []
+    },
+    {
+      "text": "how do i tag a file as a record?",
+      "intent": "QNABase",
+      "entities": []
+    },
+    {
+      "text": "how do i use the modern view in sp online?",
+      "intent": "QNABase",
+      "entities": []
+    },
+    {
+      "text": "how many active litigation cases did we receive between 1/1/2017 to 1/1/2018?",
+      "intent": "Litigation",
+      "entities": []
+    },
+    {
+      "text": "how many documents are on preservation hold for this sp online site",
+      "intent": "Legal",
+      "entities": []
+    },
+    {
+      "text": "how many substantiated internal investigation cases do we have in 2018?",
+      "intent": "InternalInvestigation",
+      "entities": []
+    },
+    {
+      "text": "i am going to usa from china",
+      "intent": "Travel",
+      "entities": []
+    },
+    {
+      "text": "i need help",
+      "intent": "Help",
+      "entities": []
+    },
+    {
+      "text": "internal investigation",
+      "intent": "InternalInvestigation",
+      "entities": []
+    },
+    {
+      "text": "internal investigation case",
+      "intent": "InternalInvestigation",
+      "entities": []
+    },
+    {
+      "text": "internal investigation cases",
+      "intent": "InternalInvestigation",
+      "entities": []
+    },
+    {
+      "text": "legal",
+      "intent": "Legal",
+      "entities": []
+    },
+    {
+      "text": "legal cases",
+      "intent": "Legal",
+      "entities": []
+    },
+    {
+      "text": "litigation",
+      "intent": "Litigation",
+      "entities": []
+    },
+    {
+      "text": "litigation case",
+      "intent": "Litigation",
+      "entities": []
+    },
+    {
+      "text": "litigation cases",
+      "intent": "Litigation",
+      "entities": []
+    },
+    {
+      "text": "what are the available options?",
+      "intent": "Help",
+      "entities": []
+    },
+    {
+      "text": "what can i do?",
+      "intent": "Help",
+      "entities": []
+    }
+  ]
+}

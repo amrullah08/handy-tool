@@ -47,7 +47,10 @@
             feedback.SuggestedActions = ResultCard.GetSuggestedActions();
             await context.PostAsync(feedback);
 
-            context.Wait(this.MessageReceived);
+            context.SendTypingAcitivity();
+            var k = new QnAMakerService(new QnAMakerAttribute(WebConfigurationManager.AppSettings["QNAAuthKey"], WebConfigurationManager.AppSettings["QNAKnowledgeBaseId"], "Sorry Could not get that", .75, endpointHostName: WebConfigurationManager.AppSettings["QNAEndpointUrl"]));
+            await context.Forward(new QnADialog(k), this.ResumeAfter, context.Activity, CancellationToken.None);
+
         }
 
     }
