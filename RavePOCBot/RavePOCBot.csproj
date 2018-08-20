@@ -232,6 +232,8 @@
     <Content Include="LuisBot.json" />
     <None Include="Properties\PublishProfiles\syedamrullah - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\syedamrullah - Web Deploy.pubxml" />
+    <None Include="Properties\PublishProfiles\syedamrullahravepoc - FTP.pubxml" />
+    <None Include="Properties\PublishProfiles\syedamrullahravepoc - Web Deploy.pubxml" />
     <None Include="Properties\PublishProfiles\syedeiptestbot - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\syedeiptestbot - Web Deploy.pubxml" />
     <None Include="Web.Debug.config">

@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using AdaptiveCards;
+using RavePOCBot.Dialogs;
 
 namespace RavePOCBot.Cards
 {
@@ -47,34 +48,26 @@ namespace RavePOCBot.Cards
         }
 
 
-        public void CustomCard(IMessageActivity message)
+        public void CustomCard(IMessageActivity message, WebPages webPages)
         {
             message.AttachmentLayout = AttachmentLayoutTypes.Carousel;
             message.Attachments = new List<Attachment>();
 
-            Dictionary<string, string> cardContentList = new Dictionary<string, string>();
-            cardContentList.Add("PigLatin", "https://<ImageUrl1>");
-            cardContentList.Add("Pork Shoulder", "https://<ImageUrl2>");
-            cardContentList.Add("Bacon", "https://<ImageUrl3>");
-
-            foreach (KeyValuePair<string, string> cardContent in cardContentList)
+        
+            foreach (var cardContent in webPages.value)
             {
                 List<AdaptiveElement> items = new List<AdaptiveElement>();
                 items.Add(new AdaptiveColumnSet()
                 {
                     Columns = new List<AdaptiveColumn>()
                             {
-                                new AdaptiveColumn
-                                {
-                                    Width = "6"
-                                },
                         new AdaptiveColumn()
                                 {
                                     Items = new List<AdaptiveElement>()
                                             {
                                                 new AdaptiveTextBlock()
                                                 {
-                                                    Text = cardContent.Key,
+                                                    Text = cardContent.name,
                                                     Weight = AdaptiveTextWeight.Bolder,
                                                     Size = AdaptiveTextSize.Small,
                                                     Wrap = true
@@ -89,6 +82,11 @@ namespace RavePOCBot.Cards
                 {
                     Body = items
                 };
+                card.Actions.Add(new AdaptiveOpenUrlAction()
+                {
+                    Url = new Uri(cardContent.url),
+                    Title = "Click me To Open"
+                });
                 Attachment attachment = new Attachment()
                 {
                     ContentType = AdaptiveCard.ContentType,
@@ -109,6 +107,7 @@ namespace RavePOCBot.Cards
                                 {
                                     new AdaptiveImage()
                                     {
+                                        Size= AdaptiveImageSize.Auto,
                                         Url = new Uri("https://rave.office.net/api/download/publicBlob?fileURL=https%3a%2f%2fwebrave.blob.core.windows.net%2fpublic%2fimages%2fRave_DJ_2.gif")
 
                                     }
@@ -116,29 +115,29 @@ namespace RavePOCBot.Cards
             };
             adaptiveColumnSet.Columns.Add(adaptiveColumn);
 
-            adaptiveColumn = new AdaptiveColumn()
-            {
-                Items = new List<AdaptiveElement>()
-                                {
-                                    new AdaptiveTextBlock()
-                                    {
-                                        Text=""
-                                    }
-                                }
-            };
-            adaptiveColumnSet.Columns.Add(adaptiveColumn);
+            //adaptiveColumn = new AdaptiveColumn()
+            //{
+            //    Items = new List<AdaptiveElement>()
+            //                    {
+            //                        new AdaptiveTextBlock()
+            //                        {
+            //                            Text=""
+            //                        }
+            //                    }
+            //};
+            //adaptiveColumnSet.Columns.Add(adaptiveColumn);
 
-            adaptiveColumn = new AdaptiveColumn()
-            {
-                Items = new List<AdaptiveElement>()
-                                {
-                                    new AdaptiveTextBlock()
-                                    {
-                                        Text=""
-                                    }
-                                }
-            };
-            adaptiveColumnSet.Columns.Add(adaptiveColumn);
+            //adaptiveColumn = new AdaptiveColumn()
+            //{
+            //    Items = new List<AdaptiveElement>()
+            //                    {
+            //                        new AdaptiveTextBlock()
+            //                        {
+            //                            Text=""
+            //                        }
+            //                    }
+            //};
+            //adaptiveColumnSet.Columns.Add(adaptiveColumn);
 
             adaptiveColumn = new AdaptiveColumn()
             {
