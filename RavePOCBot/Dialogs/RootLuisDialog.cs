@@ -42,14 +42,8 @@
         public async Task Help(IDialogContext context, LuisResult result)
         {
             context.SendTypingAcitivity();
-            var feedback = ((Activity)context.Activity).CreateReply("Hi! Try asking me questions on Troubleshooting or select below options");
-            feedback.SuggestedActions = ResultCard.GetSuggestedActions();
-            await context.PostAsync(feedback);
-
-            context.SendTypingAcitivity();
             var k = new QnAMakerService(new QnAMakerAttribute(WebConfigurationManager.AppSettings["QNAAuthKey"], WebConfigurationManager.AppSettings["QNAKnowledgeBaseId"], "Sorry Could not get that", .75, endpointHostName: WebConfigurationManager.AppSettings["QNAEndpointUrl"]));
             await context.Forward(new QnADialog(k), this.ResumeAfter, context.Activity, CancellationToken.None);
-
         }
 
     }
