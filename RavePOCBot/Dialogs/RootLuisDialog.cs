@@ -15,7 +15,6 @@
     using Microsoft.Bot.Connector;
     using Microsoft.Integration.Bot.Helpers;
     using RavePOCBot.Cards;
-    using SharePointPOCLib;
 
     [Serializable]
     public class RootLuisDialog : LuisDialog<object>

@@ -10,8 +10,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "README", "README", "{279E48
 		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharePointPOCLib", "..\SharePointPOC\SharePointPOCLib\SharePointPOCLib.csproj", "{C768BEBC-3FA0-4513-9CB6-D2A7266B5AF8}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -22,10 +20,6 @@ Global
 		{A8BA1066-5695-4D71-ABB4-65E5A5E0C3D4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A8BA1066-5695-4D71-ABB4-65E5A5E0C3D4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A8BA1066-5695-4D71-ABB4-65E5A5E0C3D4}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C768BEBC-3FA0-4513-9CB6-D2A7266B5AF8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C768BEBC-3FA0-4513-9CB6-D2A7266B5AF8}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C768BEBC-3FA0-4513-9CB6-D2A7266B5AF8}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C768BEBC-3FA0-4513-9CB6-D2A7266B5AF8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

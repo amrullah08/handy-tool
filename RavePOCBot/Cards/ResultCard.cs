@@ -1,5 +1,4 @@
 ﻿using Microsoft.Bot.Connector;
-using SharePointPOCLib;
 using System;
 using System.Collections.Generic;
 using AdaptiveCards;
