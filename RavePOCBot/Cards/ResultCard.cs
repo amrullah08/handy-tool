@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using AdaptiveCards;
 using RavePOCBot.Dialogs;
+using RavePOCBot.Common;
 
 namespace RavePOCBot.Cards
 {
@@ -226,5 +227,30 @@ namespace RavePOCBot.Cards
             };
         }
 
+        public static SuggestedActions GetSuggestedQnAActions(string[] result)
+        {
+            var k = new SuggestedActions()
+            {
+                Actions = new List<CardAction>()
+            };
+            foreach (var r in result)
+            {
+                k.Actions.Add(new CardAction() { Title = r, Type = ActionTypes.PostBack, Value = $"{r}" });
+            }
+            return k;
+        }
+
+        public static SuggestedActions GetSuggestedQnAActions(QnAResult qnAResult)
+        {
+            var k = new SuggestedActions()
+            {
+                Actions = new List<CardAction>()
+            };
+            foreach(var r in qnAResult.Answers)
+            {
+                k.Actions.Add(new CardAction() { Title = r.AnswerAnswer, Type = ActionTypes.PostBack, Value = $"{r.AnswerAnswer}" });
+            }
+            return k;
+        }
     }
 }

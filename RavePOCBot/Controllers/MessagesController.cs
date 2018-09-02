@@ -14,6 +14,7 @@
     using Microsoft.Bot.Connector;
     using Services;
     using RavePOCBot.Cards;
+    using RavePOCBot.Common;
 
     [BotAuthentication]
     public class MessagesController : ApiController
@@ -88,7 +89,8 @@
                                 reply.Attachments = new List<Attachment>();
 
                                 reply.Attachments.Add(ResultCard.ShowGreetingCard());
-                                reply.SuggestedActions = ResultCard.GetSuggestedActions();
+                                var k = QnAMaker.QnAFetchter.GetAnswers("Get Bot Options").Result;
+                                reply.SuggestedActions = ResultCard.GetSuggestedQnAActions(k.Answers[0].AnswerAnswer.Split(','));
                                 connector.Conversations.ReplyToActivityAsync(reply);
                             }
                         }
