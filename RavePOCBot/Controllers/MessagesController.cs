@@ -43,9 +43,11 @@
                         Trace.TraceError(ex.ToString());
                     }
                 }
+
+                await Conversation.SendAsync(activity, () => new RootDialog());
                 
-                var rootModelAttribute = new LuisModelAttribute(WebConfigurationManager.AppSettings["LuisModelId"], WebConfigurationManager.AppSettings["LuisSubscriptionKey"]);
-                await Conversation.SendAsync(activity, () => new RootLuisDialog(rootModelAttribute));
+                //var rootModelAttribute = new LuisModelAttribute(WebConfigurationManager.AppSettings["LuisModelId"], WebConfigurationManager.AppSettings["LuisSubscriptionKey"]);
+                //await Conversation.SendAsync(activity, () => new RootLuisDialog(rootModelAttribute));
             }
             else
             {

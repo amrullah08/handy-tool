@@ -213,7 +213,9 @@
     <Compile Include="Common\QnAResult.cs" />
     <Compile Include="Controllers\MessagesController.cs" />
     <Compile Include="DialogContextHelper.cs" />
+    <Compile Include="Dialogs\OutLookDialog.cs" />
     <Compile Include="Dialogs\QnADialog.cs" />
+    <Compile Include="Dialogs\RootDialog.cs" />
     <Compile Include="Dialogs\RootLuisDialog.cs" />
     <Compile Include="Dialogs\SearchCard.cs" />
     <Compile Include="Global.asax.cs">
