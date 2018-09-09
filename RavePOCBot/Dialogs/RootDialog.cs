@@ -125,7 +125,7 @@ namespace RavePOCBot.Dialogs
             }
 
 
-            this.CustomSearch(context, response.Text);
+            this.CustomSearch(context, context.PrivateConversationData.GetValue<string>("IntentQuery"));
             var re = context.MakeMessage();
             re.SuggestedActions = new SuggestedActions()
             {
