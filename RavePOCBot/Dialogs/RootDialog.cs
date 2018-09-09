@@ -7,6 +7,7 @@ using System.Web;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Connector;
 using Newtonsoft.Json;
+using QnAMaker;
 using RavePOCBot.Cards;
 
 namespace RavePOCBot.Dialogs
@@ -16,31 +17,79 @@ namespace RavePOCBot.Dialogs
     {
         Task IDialog<string>.StartAsync(IDialogContext context)
         {
-            context.Wait(SuggestedActions);
+            context.Wait(InitialUserQuery);
             return Task.FromResult(true);
         }
-        public async Task SuggestedActions(IDialogContext context, IAwaitable<IMessageActivity> argument)
+        public async Task InitialUserQuery(IDialogContext context, IAwaitable<IMessageActivity> argument)
         {
             var response = await argument;
             context.PrivateConversationData.SetValue("topic", response.Text);
-            var k = QnAMaker.QnAFetchter.GetAnswers(response.Text).Result;
+            var rk = LuisFetcher.GetAnswers(response.Text.ToString()).Result;
 
-            await context.PostAsync(k.Answers[0].AnswerAnswer);
-
-            var re = context.MakeMessage();
-            re.Text = "Did this help you?";
-            re.SuggestedActions = new SuggestedActions()
+            switch (rk.TopScoringIntent.IntentIntent)
             {
-                Actions = new List<CardAction>()
-            };
-            //foreach (var r in result)
-            {
-                re.SuggestedActions.Actions.Add(new CardAction() { Title = "Do you want more", Type = ActionTypes.PostBack, Value = $"Do you want more" });
+                case "outlook":
+                    context.PrivateConversationData.SetValue("Intent", "Outlook");
+                    context.PrivateConversationData.SetValue("IntentQuery", response.Text);
+                    var re = context.MakeMessage();
+                    re.Text = "Below are the top outlook oncall generators , please select below?";
+                    var qnAResults = QnAMaker.QnAFetchter.GetAnswers("Get Outlook Bot Options").Result;
+                    re.SuggestedActions = new SuggestedActions()
+                    {
+                        Actions = new List<CardAction>()
+                    };
+                    re.SuggestedActions = ResultCard.GetSuggestedQnAActions((qnAResults.Answers[0].AnswerAnswer + "," + others).Split(','));
+                    await context.PostAsync(re);
+                    context.Wait(HandleTopOncallGenerators);
+                    break;
+                default:break;
             }
 
-            await context.PostAsync(re);
-            context.Wait(this.DoYouWantMore);
         }
+
+        string others = "Others solution is not listed";
+
+        public void IssueResolved(IDialogContext context)
+        {
+            context.PostAsync("my pleasure assisting you");
+            context.Done("completed");
+        }
+
+        public async Task HandleTopOncallGenerators(IDialogContext context, IAwaitable<IMessageActivity> argument)
+        {
+            var response = await argument;
+
+            if (!response.Text.Equals(others))
+            {
+                var k = QnAMaker.QnAFetchter.GetAnswers(response.Text).Result;
+                await context.PostAsync(k.Answers[0].AnswerAnswer);
+                this.IssueResolved(context);
+                return;
+            }
+            else
+            {
+                var k = QnAMaker.QnAFetchter.GetAnswers((context.PrivateConversationData.GetValue<string>("IntentQuery"))).Result;
+                await context.PostAsync(k.Answers[0].AnswerAnswer);
+
+                var re = context.MakeMessage();
+                re.Text = "Did this help you?";
+                re.SuggestedActions = new SuggestedActions()
+                {
+                    Actions = new List<CardAction>()
+                };
+                //foreach (var r in result)
+                {
+                    re.SuggestedActions.Actions.Add(new CardAction() { Title = doYouWantMore, Type = ActionTypes.PostBack, Value = doYouWantMore });
+                    re.SuggestedActions.Actions.Add(new CardAction() { Title = issueResolved, Type = ActionTypes.PostBack, Value = issueResolved });
+                }
+
+                await context.PostAsync(re);
+                context.Wait(this.DoYouWantMoreQna);
+            }
+        }
+
+        string issueResolved = "Issue is Resolved";
+        string doYouWantMore = "Do you want more";
 
         private void CustomSearch(IDialogContext context, string text)
         {
@@ -65,36 +114,18 @@ namespace RavePOCBot.Dialogs
             context.PostAsync(msg);
         }
 
-        private async Task DoYouWantMore(IDialogContext context, IAwaitable<object> result)
-        {
-            var respoonse = await result;
-            await context.PostAsync("Enter your query");
-            context.Wait(QnAHandler);
-        }
-        private async Task QnAHandler(IDialogContext context, IAwaitable<IMessageActivity> result)
-        {
-            var respoonse = await result;
-            var k = QnAMaker.QnAFetchter.GetAnswers(respoonse.Text).Result;
-           // await context.PostAsync(k.Answers[0].AnswerAnswer);
-            var re = context.MakeMessage();
-            re.Text = k.Answers[0].AnswerAnswer;
-            re.SuggestedActions = new SuggestedActions()
-            {
-                Actions = new List<CardAction>()
-            };
-            //foreach (var r in result)
-            {
-                re.SuggestedActions.Actions.Add(new CardAction() { Title = "Do you want more", Type = ActionTypes.PostBack, Value = $"{respoonse.Text}" });
-            }
-
-            await context.PostAsync(re);
-            context.Wait(this.DoYouWantMoreQna);
-        }
-
         private async Task DoYouWantMoreQna(IDialogContext context, IAwaitable<IMessageActivity> result)
         {
-            var respoonse = await result;
-            this.CustomSearch(context, respoonse.Text);
+            var response = await result;
+
+            if (response.Text.Equals(issueResolved))
+            {
+                this.IssueResolved(context);
+                return;
+            }
+
+
+            this.CustomSearch(context, response.Text);
             var re = context.MakeMessage();
             re.SuggestedActions = new SuggestedActions()
             {
@@ -102,8 +133,11 @@ namespace RavePOCBot.Dialogs
             };
             re.Text = "We have suggested possible options";
             //foreach (var r in result)
+
+            //foreach (var r in result)
             {
-                re.SuggestedActions.Actions.Add(new CardAction() { Title = "Do you want more", Type = ActionTypes.PostBack, Value = $"Do you want more" });
+                re.SuggestedActions.Actions.Add(new CardAction() { Title = doYouWantMore, Type = ActionTypes.PostBack, Value = doYouWantMore });
+                re.SuggestedActions.Actions.Add(new CardAction() { Title = issueResolved, Type = ActionTypes.PostBack, Value = issueResolved });
             }
 
             await context.PostAsync(re);
@@ -113,6 +147,15 @@ namespace RavePOCBot.Dialogs
 
         private async Task Completed(IDialogContext context, IAwaitable<IMessageActivity> result)
         {
+            var response = await result;
+
+            if (response.Text.Equals(issueResolved))
+            {
+                this.IssueResolved(context);
+                return;
+            }
+
+
             await context.PostAsync("COLLECT OFFCAT LOGS, ETL Logs and reach out to your NEXT TEAM agent");
             context.Done("");
         }

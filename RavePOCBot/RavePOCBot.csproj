@@ -13,7 +13,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>RavePOCBot</RootNamespace>
     <AssemblyName>RavePOCBot</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
     <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort />
     <IISExpressAnonymousAuthentication />
@@ -210,6 +210,8 @@
   <ItemGroup>
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Cards\ResultCard.cs" />
+    <Compile Include="Common\LuisFetcher.cs" />
+    <Compile Include="Common\LuisResult.cs" />
     <Compile Include="Common\QnAResult.cs" />
     <Compile Include="Controllers\MessagesController.cs" />
     <Compile Include="DialogContextHelper.cs" />

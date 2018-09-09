@@ -146,25 +146,13 @@ namespace RavePOCBot.Cards
                                 {
                                     new AdaptiveTextBlock()
                                     {
-                                        Text=""
-                                    }
-                                }
-            };
-            adaptiveColumnSet.Columns.Add(adaptiveColumn);
-
-            adaptiveColumn = new AdaptiveColumn()
-            {
-                Items = new List<AdaptiveElement>()
-                                {
-                                    new AdaptiveTextBlock()
-                                    {
-                                        Text = "I am The "+ System.Configuration.ConfigurationManager.AppSettings["Company"] + " Bot. One place to find all your Performance, Troubleshooting issues.",
+                                        Text = "I am The "+ System.Configuration.ConfigurationManager.AppSettings["Company"] + " Assistant. One place to find all your Performance, Troubleshooting issues.",
                                         Weight = AdaptiveTextWeight.Bolder,
                                         Wrap = true                                        
                                     },
                                     new AdaptiveTextBlock()
                                     {
-                                        Text = "Please choose the categories below or ask questions?",
+                                        Text = "Please choose the categories below or How can i help you?",
                                         Weight = AdaptiveTextWeight.Bolder,
                                         Size = AdaptiveTextSize.Small,
                                         Wrap = true
