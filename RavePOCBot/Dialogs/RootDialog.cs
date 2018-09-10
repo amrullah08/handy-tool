@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Web;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Connector;
+using Microsoft.Integration.Bot.Helpers;
 using Newtonsoft.Json;
 using QnAMaker;
 using RavePOCBot.Cards;
@@ -23,8 +24,10 @@ namespace RavePOCBot.Dialogs
         public async Task InitialUserQuery(IDialogContext context, IAwaitable<IMessageActivity> argument)
         {
             var response = await argument;
+            await context.SendTypingAcitivity();
             context.PrivateConversationData.SetValue("topic", response.Text);
             var rk = LuisFetcher.GetAnswers(response.Text.ToString()).Result;
+            await context.SendTypingAcitivity();
 
             switch (rk.TopScoringIntent.IntentIntent)
             {
@@ -38,6 +41,7 @@ namespace RavePOCBot.Dialogs
                     {
                         Actions = new List<CardAction>()
                     };
+                    await context.SendTypingAcitivity();
                     re.SuggestedActions = ResultCard.GetSuggestedQnAActions((qnAResults.Answers[0].AnswerAnswer + "," + others).Split(','));
                     await context.PostAsync(re);
                     context.Wait(HandleTopOncallGenerators);
@@ -58,6 +62,7 @@ namespace RavePOCBot.Dialogs
         public async Task HandleTopOncallGenerators(IDialogContext context, IAwaitable<IMessageActivity> argument)
         {
             var response = await argument;
+            await context.SendTypingAcitivity();
 
             if (!response.Text.Equals(others))
             {
@@ -91,8 +96,9 @@ namespace RavePOCBot.Dialogs
         string issueResolved = "Issue is Resolved";
         string doYouWantMore = "Do you want more";
 
-        private void CustomSearch(IDialogContext context, string text)
+        private async Task CustomSearch(IDialogContext context, string text)
         {
+
             var subscriptionKey = System.Configuration.ConfigurationManager.AppSettings["BingCustomSearchKey"];
             var customConfigId = System.Configuration.ConfigurationManager.AppSettings["BingConfigId"];
             var searchTerm = text;
@@ -111,7 +117,7 @@ namespace RavePOCBot.Dialogs
 
             IMessageActivity msg = context.MakeMessage();
             resultCard.CustomCard(msg, response.webPages);
-            context.PostAsync(msg);
+            await context.PostAsync(msg);
         }
 
         private async Task DoYouWantMoreQna(IDialogContext context, IAwaitable<IMessageActivity> result)
@@ -124,8 +130,9 @@ namespace RavePOCBot.Dialogs
                 return;
             }
 
+            await context.SendTypingAcitivity();
 
-            this.CustomSearch(context, context.PrivateConversationData.GetValue<string>("IntentQuery"));
+            await this.CustomSearch(context, context.PrivateConversationData.GetValue<string>("IntentQuery"));
             var re = context.MakeMessage();
             re.SuggestedActions = new SuggestedActions()
             {
@@ -148,6 +155,7 @@ namespace RavePOCBot.Dialogs
         private async Task Completed(IDialogContext context, IAwaitable<IMessageActivity> result)
         {
             var response = await result;
+            await context.SendTypingAcitivity();
 
             if (response.Text.Equals(issueResolved))
             {
@@ -156,7 +164,7 @@ namespace RavePOCBot.Dialogs
             }
 
 
-            await context.PostAsync("PLEASE COLLECT THE RELEVANT Information (OFFCAT LOGS, ETL Logs.. ) for '" + context.PrivateConversationData.GetValue<string>("IntentQuery") + "' AND REACHOUT TO YOUR NEXT TEAM FOR FURTHER ASSISTANCE");
+            await context.PostAsync("PLEASE COLLECT THE RELEVANT Information (OFFCAT LOGS, ETL Logs. etc. ) for '" + context.PrivateConversationData.GetValue<string>("IntentQuery") + "' AND REACHOUT TO YOUR NEXT TEAM FOR FURTHER ASSISTANCE");
             context.Done("");
         }
     }
