@@ -213,6 +213,7 @@
     <Compile Include="Common\LuisFetcher.cs" />
     <Compile Include="Common\LuisResult.cs" />
     <Compile Include="Common\QnAResult.cs" />
+    <Compile Include="Common\Serialize.cs" />
     <Compile Include="Controllers\MessagesController.cs" />
     <Compile Include="DialogContextHelper.cs" />
     <Compile Include="Dialogs\OutLookDialog.cs" />

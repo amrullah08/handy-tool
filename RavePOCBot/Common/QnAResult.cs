@@ -41,23 +41,6 @@ namespace RavePOCBot.Common
 
     public partial class QnAResult
     {
-        public static QnAResult FromJson(string json) => JsonConvert.DeserializeObject<QnAResult>(json, Converter.Settings);
-    }
-
-    public static class Serialize
-    {
-        public static string ToJson(this QnAResult self) => JsonConvert.SerializeObject(self, Converter.Settings);
-    }
-
-    internal static class Converter
-    {
-        public static readonly JsonSerializerSettings Settings = new JsonSerializerSettings
-        {
-            MetadataPropertyHandling = MetadataPropertyHandling.Ignore,
-            DateParseHandling = DateParseHandling.None,
-            Converters = {
-                new IsoDateTimeConverter { DateTimeStyles = DateTimeStyles.AssumeUniversal }
-            },
-        };
+        public static QnAResult FromJson(string json) => JsonConvert.DeserializeObject<QnAResult>(json, RavePOCBot.Common.Serialize.Settings);
     }
 }

@@ -156,7 +156,7 @@ namespace RavePOCBot.Dialogs
             }
 
 
-            await context.PostAsync("COLLECT OFFCAT LOGS, ETL Logs and reach out to your NEXT TEAM agent");
+            await context.PostAsync("PLEASE COLLECT THE RELEVANT Information (OFFCAT LOGS, ETL Logs.. ) for '" + context.PrivateConversationData.GetValue<string>("IntentQuery") + "' AND REACHOUT TO YOUR NEXT TEAM FOR FURTHER ASSISTANCE");
             context.Done("");
         }
     }

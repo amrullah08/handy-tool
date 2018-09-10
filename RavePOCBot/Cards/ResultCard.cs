@@ -152,7 +152,7 @@ namespace RavePOCBot.Cards
                                     },
                                     new AdaptiveTextBlock()
                                     {
-                                        Text = "Please choose the categories below or How can i help you?",
+                                        Text = "How can i help you?",
                                         Weight = AdaptiveTextWeight.Bolder,
                                         Size = AdaptiveTextSize.Small,
                                         Wrap = true

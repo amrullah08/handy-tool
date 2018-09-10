@@ -29,6 +29,7 @@ namespace QuickType
 
         [JsonProperty("sentimentAnalysis")]
         public SentimentAnalysis SentimentAnalysis { get; set; }
+        public static LuisResult FromJson(string json) => JsonConvert.DeserializeObject<LuisResult>(json, RavePOCBot.Common.Serialize.Settings);
     }
 
     public partial class Intent
@@ -47,27 +48,5 @@ namespace QuickType
 
         [JsonProperty("score")]
         public double Score { get; set; }
-    }
-
-    public partial class LuisResult
-    {
-        public static LuisResult FromJson(string json) => JsonConvert.DeserializeObject<LuisResult>(json, QuickType.Converter.Settings);
-    }
-
-    public static class Serialize
-    {
-        public static string ToJson(this LuisResult self) => JsonConvert.SerializeObject(self, QuickType.Converter.Settings);
-    }
-
-    internal static class Converter
-    {
-        public static readonly JsonSerializerSettings Settings = new JsonSerializerSettings
-        {
-            MetadataPropertyHandling = MetadataPropertyHandling.Ignore,
-            DateParseHandling = DateParseHandling.None,
-            Converters = {
-                new IsoDateTimeConverter { DateTimeStyles = DateTimeStyles.AssumeUniversal }
-            },
-        };
     }
 }
