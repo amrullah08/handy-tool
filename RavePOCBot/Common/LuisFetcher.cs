@@ -34,7 +34,7 @@ namespace QnAMaker
             client.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Key", endpointKey);
 
             // The "q" parameter contains the utterance to send to LUIS
-            queryString["q"] = "outlook";
+            queryString["q"] = body;
             queryString["subscription-key"] = endpointKey;
 
             // These optional request parameters are set to their default values

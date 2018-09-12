@@ -46,6 +46,21 @@ namespace RavePOCBot.Dialogs
                     await context.PostAsync(re);
                     context.Wait(HandleTopOncallGenerators);
                     break;
+                case "mailbox":
+                    context.PrivateConversationData.SetValue("Intent", "mailbox");
+                    context.PrivateConversationData.SetValue("IntentQuery", response.Text);
+                    re = context.MakeMessage();
+                    re.Text = "I have solution for mailbox TOP call generators. Please select the relevant options from below";
+                    qnAResults = QnAMaker.QnAFetchter.GetAnswers("Get mailbox Bot Options").Result;
+                    re.SuggestedActions = new SuggestedActions()
+                    {
+                        Actions = new List<CardAction>()
+                    };
+                    await context.SendTypingAcitivity();
+                    re.SuggestedActions = ResultCard.GetSuggestedQnAActions((qnAResults.Answers[0].AnswerAnswer + "," + others).Split(','));
+                    await context.PostAsync(re);
+                    context.Wait(HandleTopOncallGenerators);
+                    break;
                 default:break;
             }
 
