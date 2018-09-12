@@ -35,7 +35,7 @@ namespace RavePOCBot.Dialogs
                     context.PrivateConversationData.SetValue("Intent", "Outlook");
                     context.PrivateConversationData.SetValue("IntentQuery", response.Text);
                     var re = context.MakeMessage();
-                    re.Text = "Below are the top outlook oncall generators , please select below?";
+                    re.Text = "I have solution for Outlook TOP call generators. Please select the relevant options from below";
                     var qnAResults = QnAMaker.QnAFetchter.GetAnswers("Get Outlook Bot Options").Result;
                     re.SuggestedActions = new SuggestedActions()
                     {
@@ -53,13 +53,36 @@ namespace RavePOCBot.Dialogs
 
         string others = "Others solution is not listed";
 
-        public void IssueResolved(IDialogContext context)
+        public async Task IssueResolved(IDialogContext context)
         {
-            context.PostAsync("my pleasure assisting you");
-            context.Done("completed");
+            var re = context.MakeMessage();
+            re.Text = "How was your experience with Rave Automated Bot (1-5)?";
+
+            re.SuggestedActions = new SuggestedActions()
+            {
+                Actions = new List<CardAction>()
+            };
+            await context.SendTypingAcitivity();
+            re.SuggestedActions.Actions = new List<CardAction>(new CardAction[] {
+            new CardAction() { Title = "1", Type = ActionTypes.PostBack, Value = "1" },
+            new CardAction() { Title = "2", Type = ActionTypes.PostBack, Value = "2" },
+            new CardAction() { Title = "3", Type = ActionTypes.PostBack, Value = "3" },
+            new CardAction() { Title = "4", Type = ActionTypes.PostBack, Value = "4" },
+            new CardAction() { Title = "5", Type = ActionTypes.PostBack, Value = "5" }
+        });
+
+            await context.PostAsync(re);
+            context.Wait(IssueResolvedWaitHandler);
         }
 
-        public async Task HandleTopOncallGenerators(IDialogContext context, IAwaitable<IMessageActivity> argument)
+        public async Task IssueResolvedWaitHandler(IDialogContext context, IAwaitable<IMessageActivity> argument)
+        {
+            await context.PostAsync("Thank you for providing valuable feedback. Please let me know if you have any additional queries");
+            context.Done("completed");
+
+        }
+
+            public async Task HandleTopOncallGenerators(IDialogContext context, IAwaitable<IMessageActivity> argument)
         {
             var response = await argument;
             await context.SendTypingAcitivity();
@@ -68,33 +91,36 @@ namespace RavePOCBot.Dialogs
             {
                 var k = QnAMaker.QnAFetchter.GetAnswers(response.Text).Result;
                 await context.PostAsync(k.Answers[0].AnswerAnswer);
-                this.IssueResolved(context);
-                return;
             }
             else
             {
                 var k = QnAMaker.QnAFetchter.GetAnswers((context.PrivateConversationData.GetValue<string>("IntentQuery"))).Result;
                 await context.PostAsync(k.Answers[0].AnswerAnswer);
 
-                var re = context.MakeMessage();
-                re.Text = "Did this help you?";
-                re.SuggestedActions = new SuggestedActions()
-                {
-                    Actions = new List<CardAction>()
-                };
-                //foreach (var r in result)
-                {
-                    re.SuggestedActions.Actions.Add(new CardAction() { Title = doYouWantMore, Type = ActionTypes.PostBack, Value = doYouWantMore });
-                    re.SuggestedActions.Actions.Add(new CardAction() { Title = issueResolved, Type = ActionTypes.PostBack, Value = issueResolved });
-                }
-
-                await context.PostAsync(re);
-                context.Wait(this.DoYouWantMoreQna);
             }
+
+            var re = context.MakeMessage();
+            re.Text = "Did this help you?";
+            re.SuggestedActions = new SuggestedActions()
+            {
+                Actions = new List<CardAction>()
+            };
+            //foreach (var r in result)
+            {
+                re.SuggestedActions.Actions = issueSolvedCardAction;
+            }
+
+            await context.PostAsync(re);
+            context.Wait(this.DoYouWantMoreQna);
         }
 
-        string issueResolved = "Issue is Resolved";
-        string doYouWantMore = "Do you want more";
+        static string issueResolved = "Yes, Issue is Resolved";
+        static string doYouWantMore = "No, Issue is not resolved";
+
+        static IList<CardAction> issueSolvedCardAction = new List<CardAction>(new CardAction[] {
+            new CardAction() { Title = issueResolved, Type = ActionTypes.PostBack, Value = issueResolved },
+            new CardAction() { Title = doYouWantMore, Type = ActionTypes.PostBack, Value = doYouWantMore }
+        });
 
         private async Task CustomSearch(IDialogContext context, string text)
         {
@@ -126,7 +152,7 @@ namespace RavePOCBot.Dialogs
 
             if (response.Text.Equals(issueResolved))
             {
-                this.IssueResolved(context);
+                await this.IssueResolved(context);
                 return;
             }
 
@@ -143,8 +169,7 @@ namespace RavePOCBot.Dialogs
 
             //foreach (var r in result)
             {
-                re.SuggestedActions.Actions.Add(new CardAction() { Title = doYouWantMore, Type = ActionTypes.PostBack, Value = doYouWantMore });
-                re.SuggestedActions.Actions.Add(new CardAction() { Title = issueResolved, Type = ActionTypes.PostBack, Value = issueResolved });
+                re.SuggestedActions.Actions = issueSolvedCardAction;
             }
 
             await context.PostAsync(re);
@@ -159,7 +184,7 @@ namespace RavePOCBot.Dialogs
 
             if (response.Text.Equals(issueResolved))
             {
-                this.IssueResolved(context);
+                await this.IssueResolved(context);
                 return;
             }
 

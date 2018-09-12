@@ -146,13 +146,13 @@ namespace RavePOCBot.Cards
                                 {
                                     new AdaptiveTextBlock()
                                     {
-                                        Text = "I am The "+ System.Configuration.ConfigurationManager.AppSettings["Company"] + " Assistant. One place to find all your Performance, Troubleshooting issues.",
+                                        Text = "I am The "+ System.Configuration.ConfigurationManager.AppSettings["Company"] + " Assistant.",
                                         Weight = AdaptiveTextWeight.Bolder,
                                         Wrap = true                                        
                                     },
                                     new AdaptiveTextBlock()
                                     {
-                                        Text = "How can i help you?",
+                                        Text = "How can i help you today?",
                                         Weight = AdaptiveTextWeight.Bolder,
                                         Size = AdaptiveTextSize.Small,
                                         Wrap = true
