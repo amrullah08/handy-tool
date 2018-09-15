@@ -1,5 +1,10 @@
 ﻿namespace RavePOCBot
 {
+    using Dialogs;
+    using Microsoft.Bot.Builder.Dialogs;
+    using Microsoft.Bot.Connector;
+    using RavePOCBot.Cards;
+    using Services;
     using System;
     using System.Collections.Generic;
     using System.Diagnostics;
@@ -8,13 +13,6 @@
     using System.Threading.Tasks;
     using System.Web.Configuration;
     using System.Web.Http;
-    using Dialogs;
-    using Microsoft.Bot.Builder.Dialogs;
-    using Microsoft.Bot.Builder.Luis;
-    using Microsoft.Bot.Connector;
-    using Services;
-    using RavePOCBot.Cards;
-    using RavePOCBot.Common;
 
     [BotAuthentication]
     public class MessagesController : ApiController
@@ -45,7 +43,7 @@
                 }
 
                 await Conversation.SendAsync(activity, () => new RootDialog());
-                
+
                 //var rootModelAttribute = new LuisModelAttribute(WebConfigurationManager.AppSettings["LuisModelId"], WebConfigurationManager.AppSettings["LuisSubscriptionKey"]);
                 //await Conversation.SendAsync(activity, () => new RootLuisDialog(rootModelAttribute));
             }
@@ -84,7 +82,7 @@
 
                         foreach (var member in iConversationUpdated.MembersAdded ?? System.Array.Empty<ChannelAccount>())
                         {
-                            // if the bot is added, then 
+                            // if the bot is added, then
                             if (member.Id == iConversationUpdated.Recipient.Id)
                             {
                                 var reply = ((Activity)iConversationUpdated).CreateReply();

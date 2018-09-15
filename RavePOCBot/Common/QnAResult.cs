@@ -1,16 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-
-namespace RavePOCBot.Common
+﻿namespace RavePOCBot.Common
 {
-    using System;
-    using System.Collections.Generic;
-
-    using System.Globalization;
     using Newtonsoft.Json;
-    using Newtonsoft.Json.Converters;
 
     public partial class QnAResult
     {

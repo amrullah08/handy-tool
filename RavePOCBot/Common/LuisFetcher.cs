@@ -1,31 +1,27 @@
-﻿using RavePOCBot.Common;
+﻿using QuickType;
 using System;
 using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
-using System.Configuration;
 using System.Web;
-using QuickType;
 
 namespace QnAMaker
 {
-    class LuisFetcher
+    internal class LuisFetcher
     {
-
         // NOTE: Replace this with a valid host name.
-        static string host = System.Configuration.ConfigurationSettings.AppSettings["LuisEndpointUrl"];
+        private static string host = System.Configuration.ConfigurationSettings.AppSettings["LuisEndpointUrl"];
 
         // NOTE: Replace this with a valid endpoint key.
         // This is not your subscription key.
         // To get your endpoint keys, call the GET /endpointkeys method.
-        static string luisAppId = System.Configuration.ConfigurationSettings.AppSettings["LuisModelId"];
+        private static string luisAppId = System.Configuration.ConfigurationSettings.AppSettings["LuisModelId"];
 
         // NOTE: Replace this with a valid knowledge base ID.
         // Make sure you have published the knowledge base with the
         // POST /knowledgebases/{knowledge base ID} method.
-        static string endpointKey = System.Configuration.ConfigurationSettings.AppSettings["LuisSubscriptionKey"];
-        
-        async static Task<string> GetAsync(string body)
+        private static string endpointKey = System.Configuration.ConfigurationSettings.AppSettings["LuisSubscriptionKey"];
+
+        private static async Task<string> GetAsync(string body)
         {
             var client = new HttpClient();
             var queryString = HttpUtility.ParseQueryString(string.Empty);
@@ -55,19 +51,16 @@ namespace QnAMaker
                 Console.WriteLine(strResponseContent.ToString());
                 return strResponseContent;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-
                 return null;
             }
         }
-
 
         public async static Task<LuisResult> GetAnswers(string question)
         {
             try
             {
-
                 var response = await GetAsync(question);
                 return LuisResult.FromJson(response);
             }

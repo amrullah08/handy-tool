@@ -3,32 +3,28 @@ using System;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
-using System.Configuration;
 
 namespace QnAMaker
 {
-    class QnAFetchter
+    internal class QnAFetchter
     {
         // NOTE: Replace this with a valid host name.
-        static string host = System.Configuration.ConfigurationSettings.AppSettings["QNAEndpointUrlOnlyHost"];
+        private static string host = System.Configuration.ConfigurationSettings.AppSettings["QNAEndpointUrlOnlyHost"];
 
         // NOTE: Replace this with a valid endpoint key.
         // This is not your subscription key.
         // To get your endpoint keys, call the GET /endpointkeys method.
-        static string endpoint_key = System.Configuration.ConfigurationSettings.AppSettings["QNAAuthKey"];
+        private static string endpoint_key = System.Configuration.ConfigurationSettings.AppSettings["QNAAuthKey"];
 
         // NOTE: Replace this with a valid knowledge base ID.
         // Make sure you have published the knowledge base with the
         // POST /knowledgebases/{knowledge base ID} method.
-        static string kb = System.Configuration.ConfigurationSettings.AppSettings["QNAKnowledgeBaseId"];
+        private static string kb = System.Configuration.ConfigurationSettings.AppSettings["QNAKnowledgeBaseId"];
 
+        private static string service = "/qnamaker";
+        private static string method = "/knowledgebases/" + kb + "/generateAnswer/";
 
-
-        static string service = "/qnamaker";
-        static string method = "/knowledgebases/" + kb + "/generateAnswer/";
-
-
-        async static Task<string> Post(string uri, string body)
+        private static async Task<string> Post(string uri, string body)
         {
             body = "{'question': '" + body + "','top': 3}";
             using (var client = new HttpClient())
@@ -54,7 +50,6 @@ namespace QnAMaker
         {
             try
             {
-
                 var uri = host + service + method;
                 Console.WriteLine("Calling " + uri + ".");
                 var response = await Post(uri, question);

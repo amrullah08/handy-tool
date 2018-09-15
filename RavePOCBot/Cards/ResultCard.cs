@@ -1,10 +1,10 @@
-﻿using Microsoft.Bot.Connector;
+﻿using AdaptiveCards;
+using Microsoft.Bot.Builder.Dialogs;
+using Microsoft.Bot.Connector;
+using RavePOCBot.Common;
+using RavePOCBot.Dialogs;
 using System;
 using System.Collections.Generic;
-using AdaptiveCards;
-using RavePOCBot.Dialogs;
-using RavePOCBot.Common;
-using Microsoft.Bot.Builder.Dialogs;
 using System.Threading.Tasks;
 
 namespace RavePOCBot.Cards
@@ -50,13 +50,11 @@ namespace RavePOCBot.Cards
             }
         }
 
-
         public void CustomCard(IMessageActivity message, WebPages webPages)
         {
             message.AttachmentLayout = AttachmentLayoutTypes.Carousel;
             message.Attachments = new List<Attachment>();
 
-        
             foreach (var cardContent in webPages.value)
             {
                 List<AdaptiveElement> items = new List<AdaptiveElement>();
@@ -79,7 +77,6 @@ namespace RavePOCBot.Cards
                                 }
                     }
                 });
-
 
                 AdaptiveCard card = new AdaptiveCard()
                 {
@@ -108,11 +105,11 @@ namespace RavePOCBot.Cards
             this.ConvertToOptionsCard(re, options);
             await context.PostAsync(re);
         }
+
         public void ConvertToOptionsCard(IMessageActivity message, string[] options)
         {
             message.AttachmentLayout = AttachmentLayoutTypes.Carousel;
             message.Attachments = new List<Attachment>();
-
 
             foreach (var cardContent in options)
             {
@@ -142,7 +139,6 @@ namespace RavePOCBot.Cards
             message.AttachmentLayout = AttachmentLayoutTypes.Carousel;
             message.Attachments = new List<Attachment>();
 
-
             foreach (var cardContent in qnAResult.Answers[0].AnswerAnswer.Split(','))
             {
                 List<AdaptiveElement> items = new List<AdaptiveElement>();
@@ -165,6 +161,7 @@ namespace RavePOCBot.Cards
                 message.Attachments.Add(attachment);
             }
         }
+
         public static Attachment ShowGreetingCard()
         {
             AdaptiveContainer adaptiveContainer = new AdaptiveContainer();
@@ -177,7 +174,6 @@ namespace RavePOCBot.Cards
                                     {
                                         Size= AdaptiveImageSize.Auto,
                                         Url = new Uri("https://rave.office.net/api/download/publicBlob?fileURL=https%3a%2f%2fwebrave.blob.core.windows.net%2fpublic%2fimages%2fRave_DJ_2.gif")
-
                                     }
                                 }
             };
@@ -215,7 +211,7 @@ namespace RavePOCBot.Cards
                                     {
                                         Text = "I am The "+ System.Configuration.ConfigurationManager.AppSettings["Company"] + " Assistant.",
                                         Weight = AdaptiveTextWeight.Bolder,
-                                        Wrap = true                                        
+                                        Wrap = true
                                     },
                                     new AdaptiveTextBlock()
                                     {
@@ -240,7 +236,6 @@ namespace RavePOCBot.Cards
             return attachment;
         }
 
-
         private static Attachment GetHeroCard(string title, string subtitle, string text, CardImage cardImage, CardAction cardAction)
         {
             var heroCard = new HeroCard
@@ -250,7 +245,6 @@ namespace RavePOCBot.Cards
                 Text = text,
                 Images = new List<CardImage>() { cardImage },
                 Buttons = new List<CardAction>() { cardAction },
-                
             };
 
             return heroCard.ToAttachment();
@@ -301,7 +295,7 @@ namespace RavePOCBot.Cards
             {
                 Actions = new List<CardAction>()
             };
-            foreach(var r in qnAResult.Answers)
+            foreach (var r in qnAResult.Answers)
             {
                 k.Actions.Add(new CardAction() { Title = r.AnswerAnswer, Type = ActionTypes.PostBack, Value = $"{r.AnswerAnswer}" });
             }

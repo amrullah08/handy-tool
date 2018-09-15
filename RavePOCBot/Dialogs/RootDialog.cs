@@ -1,15 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
-using System.Threading.Tasks;
-using System.Web;
-using Microsoft.Bot.Builder.Dialogs;
+﻿using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Connector;
 using Microsoft.Integration.Bot.Helpers;
 using Newtonsoft.Json;
 using QnAMaker;
 using RavePOCBot.Cards;
+using System;
+using System.Collections.Generic;
+using System.Net.Http;
+using System.Threading.Tasks;
 
 namespace RavePOCBot.Dialogs
 {
@@ -21,6 +19,7 @@ namespace RavePOCBot.Dialogs
             context.Wait(InitialUserQuery);
             return Task.FromResult(true);
         }
+
         public async Task InitialUserQuery(IDialogContext context, IAwaitable<IMessageActivity> argument)
         {
             var response = await argument;
@@ -48,6 +47,7 @@ namespace RavePOCBot.Dialogs
                     await context.PostAsync(re);
                     context.Wait(HandleTopOncallGenerators);
                     break;
+
                 case "mailbox":
                     context.PrivateConversationData.SetValue("Intent", "mailbox");
                     context.PrivateConversationData.SetValue("IntentQuery", response.Text);
@@ -63,12 +63,12 @@ namespace RavePOCBot.Dialogs
                     await context.PostAsync(re);
                     context.Wait(HandleTopOncallGenerators);
                     break;
-                default:break;
-            }
 
+                default: break;
+            }
         }
 
-        string others = "Others solution is not listed";
+        private string others = "Others solution is not listed";
 
         public async Task IssueResolved(IDialogContext context)
         {
@@ -96,10 +96,9 @@ namespace RavePOCBot.Dialogs
         {
             await context.PostAsync("Thank you for providing valuable feedback. Please let me know if you have any additional queries");
             context.Done("completed");
-
         }
 
-            public async Task HandleTopOncallGenerators(IDialogContext context, IAwaitable<IMessageActivity> argument)
+        public async Task HandleTopOncallGenerators(IDialogContext context, IAwaitable<IMessageActivity> argument)
         {
             var response = await argument;
             await context.SendTypingAcitivity();
@@ -113,21 +112,19 @@ namespace RavePOCBot.Dialogs
             {
                 var k = QnAMaker.QnAFetchter.GetAnswers((context.PrivateConversationData.GetValue<string>("IntentQuery"))).Result;
                 await context.PostAsync(k.Answers[0].AnswerAnswer);
-
             }
             ResultCard resultCard = new ResultCard();
             await resultCard.PostAsyncWithConvertToOptionsCard(context, "Did this help you?", issueSolvedCardAction);
             context.Wait(this.DoYouWantMoreQna);
         }
 
-        static string issueResolved = "Yes, Issue is Resolved";
-        static string doYouWantMore = "No, Issue is not resolved";
+        private static string issueResolved = "Yes, Issue is Resolved";
+        private static string doYouWantMore = "No, Issue is not resolved";
 
-        static string[] issueSolvedCardAction = new string[] { issueResolved, doYouWantMore };
+        private static string[] issueSolvedCardAction = new string[] { issueResolved, doYouWantMore };
 
         private async Task CustomSearch(IDialogContext context, string text)
         {
-
             var subscriptionKey = System.Configuration.ConfigurationManager.AppSettings["BingCustomSearchKey"];
             var customConfigId = System.Configuration.ConfigurationManager.AppSettings["BingConfigId"];
             var searchTerm = text;
@@ -162,12 +159,11 @@ namespace RavePOCBot.Dialogs
             await context.SendTypingAcitivity();
 
             await this.CustomSearch(context, context.PrivateConversationData.GetValue<string>("IntentQuery"));
-            
+
             ResultCard resultCard = new ResultCard();
             await resultCard.PostAsyncWithConvertToOptionsCard(context, "We have suggested possible options", issueSolvedCardAction);
 
             context.Wait(this.Completed);
-
         }
 
         private async Task Completed(IDialogContext context, IAwaitable<IMessageActivity> result)
@@ -180,7 +176,6 @@ namespace RavePOCBot.Dialogs
                 await this.IssueResolved(context);
                 return;
             }
-
 
             await context.PostAsync("PLEASE COLLECT THE RELEVANT Information (OFFCAT LOGS, ETL Logs. etc. ) for '" + context.PrivateConversationData.GetValue<string>("IntentQuery") + "' AND REACHOUT TO YOUR NEXT TEAM FOR FURTHER ASSISTANCE");
             context.Done("");

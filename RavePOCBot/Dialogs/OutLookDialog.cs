@@ -1,14 +1,10 @@
-﻿
-using Microsoft.Bot.Builder.Dialogs;
+﻿using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Connector;
 using Newtonsoft.Json;
 using RavePOCBot.Cards;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
-using System.Web;
 
 namespace RavePOCBot.Dialogs
 {
@@ -19,6 +15,7 @@ namespace RavePOCBot.Dialogs
             context.Wait(SuggestedActions);
             return Task.FromResult(true);
         }
+
         public async Task SuggestedActions(IDialogContext context, IAwaitable<IMessageActivity> argument)
         {
             var response = await argument;
@@ -71,6 +68,7 @@ namespace RavePOCBot.Dialogs
             await context.PostAsync("Enter your query");
             context.Wait(QnAHandler);
         }
+
         private async Task QnAHandler(IDialogContext context, IAwaitable<IMessageActivity> result)
         {
             var respoonse = await result;
@@ -108,7 +106,6 @@ namespace RavePOCBot.Dialogs
 
             await context.PostAsync(re);
             context.Wait(this.Completed);
-
         }
 
         private async Task Completed(IDialogContext context, IAwaitable<IMessageActivity> result)

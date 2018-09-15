@@ -9,9 +9,9 @@
 
 namespace Microsoft.Integration.Bot.Helpers
 {
-    using System.Threading.Tasks;
     using Microsoft.Bot.Builder.Dialogs;
     using Microsoft.Bot.Connector;
+    using System.Threading.Tasks;
 
     /// <summary>
     /// Extension for DialogContext
@@ -30,6 +30,5 @@ namespace Microsoft.Integration.Bot.Helpers
             reply.Type = ActivityTypes.Typing;
             await context.PostAsync(reply);
         }
-
     }
 }

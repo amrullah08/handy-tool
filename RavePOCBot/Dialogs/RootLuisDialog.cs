@@ -1,27 +1,23 @@
 ﻿namespace RavePOCBot.Dialogs
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-    using System.Web;
-    using System.Web.Configuration;
     using Microsoft.Bot.Builder.CognitiveServices.QnAMaker;
     using Microsoft.Bot.Builder.Dialogs;
-    using Microsoft.Bot.Builder.FormFlow;
     using Microsoft.Bot.Builder.Luis;
     using Microsoft.Bot.Builder.Luis.Models;
     using Microsoft.Bot.Connector;
     using Microsoft.Integration.Bot.Helpers;
     using Newtonsoft.Json;
     using RavePOCBot.Cards;
+    using System;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
+    using System.Web.Configuration;
 
     [Serializable]
     public class RootLuisDialog : LuisDialog<object>
     {
-        public RootLuisDialog(LuisModelAttribute luisModelAttribute):base(new LuisService(luisModelAttribute))
+        public RootLuisDialog(LuisModelAttribute luisModelAttribute) : base(new LuisService(luisModelAttribute))
         {
         }
 
@@ -30,7 +26,6 @@
         public async Task None(IDialogContext context, LuisResult result)
         {
             context.SendTypingAcitivity();
-
 
             var k = new QnAMakerService(new QnAMakerAttribute(WebConfigurationManager.AppSettings["QNAAuthKey"], WebConfigurationManager.AppSettings["QNAKnowledgeBaseId"], "Sorry Could not get that", .3, endpointHostName: WebConfigurationManager.AppSettings["QNAEndpointUrl"]));
             await context.Forward(new QnADialog(k), this.ResumeAfter, context.Activity, CancellationToken.None);
@@ -74,7 +69,6 @@
             var k = new QnAMakerService(new QnAMakerAttribute(WebConfigurationManager.AppSettings["QNAAuthKey"], WebConfigurationManager.AppSettings["QNAKnowledgeBaseId"], "Sorry Could not get that", .3, endpointHostName: WebConfigurationManager.AppSettings["QNAEndpointUrl"]));
             await context.Forward(new QnADialog(k), this.ResumeAfter, context.Activity, CancellationToken.None);
         }
-
     }
 
     public class BingCustomSearchResponse

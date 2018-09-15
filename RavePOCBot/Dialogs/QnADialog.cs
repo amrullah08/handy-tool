@@ -8,15 +8,11 @@
 
 namespace RavePOCBot.Dialogs
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Configuration;
-    using System.Linq;
-    using System.Threading.Tasks;
-    using System.Web;
     using Microsoft.Bot.Builder.CognitiveServices.QnAMaker;
     using Microsoft.Bot.Builder.Dialogs;
     using Microsoft.Bot.Connector;
+    using System;
+    using System.Threading.Tasks;
 
     /// <summary>
     /// dialog for connecting to Question and answer service
