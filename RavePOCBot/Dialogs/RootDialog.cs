@@ -37,12 +37,14 @@ namespace RavePOCBot.Dialogs
                     var re = context.MakeMessage();
                     re.Text = "I have solution for Outlook TOP call generators. Please select the relevant options from below";
                     var qnAResults = QnAMaker.QnAFetchter.GetAnswers("Get Outlook Bot Options").Result;
-                    re.SuggestedActions = new SuggestedActions()
-                    {
-                        Actions = new List<CardAction>()
-                    };
+                    //re.SuggestedActions = new SuggestedActions()
+                    //{
+                    //    Actions = new List<CardAction>()
+                    //};
                     await context.SendTypingAcitivity();
-                    re.SuggestedActions = ResultCard.GetSuggestedQnAActions((qnAResults.Answers[0].AnswerAnswer + "," + others).Split(','));
+                    //re.SuggestedActions = ResultCard.GetSuggestedQnAActions((qnAResults.Answers[0].AnswerAnswer + "," + others).Split(','));
+                    ResultCard resultCard = new ResultCard();
+                    resultCard.CustomQnACard(re, qnAResults);
                     await context.PostAsync(re);
                     context.Wait(HandleTopOncallGenerators);
                     break;
@@ -113,29 +115,15 @@ namespace RavePOCBot.Dialogs
                 await context.PostAsync(k.Answers[0].AnswerAnswer);
 
             }
-
-            var re = context.MakeMessage();
-            re.Text = "Did this help you?";
-            re.SuggestedActions = new SuggestedActions()
-            {
-                Actions = new List<CardAction>()
-            };
-            //foreach (var r in result)
-            {
-                re.SuggestedActions.Actions = issueSolvedCardAction;
-            }
-
-            await context.PostAsync(re);
+            ResultCard resultCard = new ResultCard();
+            await resultCard.PostAsyncWithConvertToOptionsCard(context, "Did this help you?", issueSolvedCardAction);
             context.Wait(this.DoYouWantMoreQna);
         }
 
         static string issueResolved = "Yes, Issue is Resolved";
         static string doYouWantMore = "No, Issue is not resolved";
 
-        static IList<CardAction> issueSolvedCardAction = new List<CardAction>(new CardAction[] {
-            new CardAction() { Title = issueResolved, Type = ActionTypes.PostBack, Value = issueResolved },
-            new CardAction() { Title = doYouWantMore, Type = ActionTypes.PostBack, Value = doYouWantMore }
-        });
+        static string[] issueSolvedCardAction = new string[] { issueResolved, doYouWantMore };
 
         private async Task CustomSearch(IDialogContext context, string text)
         {
@@ -174,20 +162,10 @@ namespace RavePOCBot.Dialogs
             await context.SendTypingAcitivity();
 
             await this.CustomSearch(context, context.PrivateConversationData.GetValue<string>("IntentQuery"));
-            var re = context.MakeMessage();
-            re.SuggestedActions = new SuggestedActions()
-            {
-                Actions = new List<CardAction>()
-            };
-            re.Text = "We have suggested possible options";
-            //foreach (var r in result)
+            
+            ResultCard resultCard = new ResultCard();
+            await resultCard.PostAsyncWithConvertToOptionsCard(context, "We have suggested possible options", issueSolvedCardAction);
 
-            //foreach (var r in result)
-            {
-                re.SuggestedActions.Actions = issueSolvedCardAction;
-            }
-
-            await context.PostAsync(re);
             context.Wait(this.Completed);
 
         }

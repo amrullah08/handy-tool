@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using AdaptiveCards;
 using RavePOCBot.Dialogs;
 using RavePOCBot.Common;
+using Microsoft.Bot.Builder.Dialogs;
+using System.Threading.Tasks;
 
 namespace RavePOCBot.Cards
 {
@@ -98,6 +100,71 @@ namespace RavePOCBot.Cards
             }
         }
 
+        public async Task PostAsyncWithConvertToOptionsCard(IDialogContext context, string title, string[] options)
+        {
+            var re = context.MakeMessage();
+            if (!string.IsNullOrEmpty(title))
+                re.Text = title;
+            this.ConvertToOptionsCard(re, options);
+            await context.PostAsync(re);
+        }
+        public void ConvertToOptionsCard(IMessageActivity message, string[] options)
+        {
+            message.AttachmentLayout = AttachmentLayoutTypes.Carousel;
+            message.Attachments = new List<Attachment>();
+
+
+            foreach (var cardContent in options)
+            {
+                List<AdaptiveElement> items = new List<AdaptiveElement>();
+
+                AdaptiveCard card = new AdaptiveCard()
+                {
+                    Body = items
+                };
+                card.Actions.Add(new AdaptiveSubmitAction()
+                {
+                    Title = cardContent,
+                    Data = cardContent
+                });
+                Attachment attachment = new Attachment()
+                {
+                    ContentType = AdaptiveCard.ContentType,
+                    Content = card
+                };
+
+                message.Attachments.Add(attachment);
+            }
+        }
+
+        public void CustomQnACard(IMessageActivity message, QnAResult qnAResult)
+        {
+            message.AttachmentLayout = AttachmentLayoutTypes.Carousel;
+            message.Attachments = new List<Attachment>();
+
+
+            foreach (var cardContent in qnAResult.Answers[0].AnswerAnswer.Split(','))
+            {
+                List<AdaptiveElement> items = new List<AdaptiveElement>();
+
+                AdaptiveCard card = new AdaptiveCard()
+                {
+                    Body = items
+                };
+                card.Actions.Add(new AdaptiveSubmitAction()
+                {
+                    Title = cardContent,
+                    Data = cardContent
+                });
+                Attachment attachment = new Attachment()
+                {
+                    ContentType = AdaptiveCard.ContentType,
+                    Content = card
+                };
+
+                message.Attachments.Add(attachment);
+            }
+        }
         public static Attachment ShowGreetingCard()
         {
             AdaptiveContainer adaptiveContainer = new AdaptiveContainer();
