@@ -80,7 +80,7 @@
 
 .wc-suggested-actions .wc-hscroll>ul>li button {
     background-color: #fff;
-    color: #37AA33;
+    color: #00b193;
     min-height: 32px;
     overflow: hidden;
     padding: 0 16px;
@@ -91,13 +91,13 @@
 
 .wc-suggested-actions .wc-hscroll>ul>li button:hover {
     background-color: #fff;
-    border-color: #37AA33;
-    color: #37AA33;
+    border-color: #00b193;
+    color: #00b193;
 }
 
 .wc-suggested-actions .wc-hscroll>ul>li button:active {
-    background-color: #37AA33;
-    border-color: #37AA33;
+    background-color: #00b193;
+    border-color: #00b193;
     color: #fff;
 }
 
@@ -244,7 +244,7 @@
 
 .wc-card button {
     background-color: #d3eed3;
-    color: #34b223;
+    color: #00C993;
     min-height: 32px;
     width: 300px;
     padding: 8px 16px;
@@ -262,14 +262,14 @@
 
 .wc-card button:hover {
     background-color: transparent;
-    border-color: #37AA33;
+    border-color: #00b193;
     border: solid 1px;
-    color: #37AA33;
+    color: #00b193;
 }
 
 .wc-card button:active {
-    background-color: #37AA33;
-    border-color: #37AA33;
+    background-color: #00b193;
+    border-color: #00b193;
     color: #fff;
 }
 
@@ -609,13 +609,13 @@
 }
 
 .wc-message-from-me .wc-message-content {
-    background-color: #34b223;
+    background-color: #00C993;
     color: #fff;
     border-radius: 20px 0px 20px 20px;
 }
 
 .wc-message-from-me svg.wc-message-callout path {
-    fill: #37AA33;
+    fill: #00b193;
 }
 
 .wc-message-from-me svg.wc-message-callout path.point-left {
@@ -678,13 +678,13 @@
 
 .carousel .wc-message-from-bot .wc-message-content .ac-pushButton {
     background: transparent;
-    border: solid 1px #34B233;
-    color: #34B233;
+    border: solid 1px #00C993;
+    color: #00C993;
     border-radius: 10px;
 }
 
 .carousel .wc-message-from-bot .wc-message-content .ac-pushButton:hover {
-    background: #34B233;
+    background: #00C993;
     color: #fff;
 }
 
@@ -774,7 +774,7 @@
 }
 
 .wc-console.has-text .wc-send svg {
-    fill: #37AA33;
+    fill: #00b193;
 }
 
 .wc-typing {
