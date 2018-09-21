@@ -6,6 +6,7 @@ using QnAMaker;
 using RavePOCBot.Cards;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 
@@ -14,6 +15,7 @@ namespace RavePOCBot.Dialogs
     [Serializable]
     public class RootDialog : IDialog<string>
     {
+        static string[] topOnCallTopics = QnAMaker.QnAFetchter.GetAnswers("Bot Custom Topics").Result.Answers[0].AnswerAnswer.Split(',');
         Task IDialog<string>.StartAsync(IDialogContext context)
         {
             context.Wait(InitialUserQuery);
@@ -27,45 +29,73 @@ namespace RavePOCBot.Dialogs
             context.PrivateConversationData.SetValue("topic", response.Text);
             var rk = LuisFetcher.GetAnswers(response.Text.ToString()).Result;
             await context.SendTypingAcitivity();
+            var selectedIntent = topOnCallTopics.FirstOrDefault(cc => cc.Equals(rk.TopScoringIntent.IntentIntent));
 
-            switch (rk.TopScoringIntent.IntentIntent)
+            if (selectedIntent != null)
             {
-                case "outlook":
-                    context.PrivateConversationData.SetValue("Intent", "Outlook");
-                    context.PrivateConversationData.SetValue("IntentQuery", response.Text);
-                    var re = context.MakeMessage();
-                    re.Text = "I have solution for Outlook TOP call generators. Please select the relevant options from below";
-                    var qnAResults = QnAMaker.QnAFetchter.GetAnswers("Get Outlook Bot Options").Result;
-                    //re.SuggestedActions = new SuggestedActions()
-                    //{
-                    //    Actions = new List<CardAction>()
-                    //};
-                    await context.SendTypingAcitivity();
-                    //re.SuggestedActions = ResultCard.GetSuggestedQnAActions((qnAResults.Answers[0].AnswerAnswer + "," + others).Split(','));
-                    ResultCard resultCard = new ResultCard();
-                    resultCard.CustomQnACard(re, qnAResults);
-                    await context.PostAsync(re);
-                    context.Wait(HandleTopOncallGenerators);
-                    break;
-
-                case "mailbox":
-                    context.PrivateConversationData.SetValue("Intent", "mailbox");
-                    context.PrivateConversationData.SetValue("IntentQuery", response.Text);
-                    re = context.MakeMessage();
-                    re.Text = "I have solution for mailbox TOP call generators. Please select the relevant options from below";
-                    qnAResults = QnAMaker.QnAFetchter.GetAnswers("Get mailbox Bot Options").Result;
-                    re.SuggestedActions = new SuggestedActions()
-                    {
-                        Actions = new List<CardAction>()
-                    };
-                    await context.SendTypingAcitivity();
-                    re.SuggestedActions = ResultCard.GetSuggestedQnAActions((qnAResults.Answers[0].AnswerAnswer + "," + others).Split(','));
-                    await context.PostAsync(re);
-                    context.Wait(HandleTopOncallGenerators);
-                    break;
-
-                default: break;
+                context.PrivateConversationData.SetValue("Intent", selectedIntent);
+                context.PrivateConversationData.SetValue("IntentQuery", response.Text);
+                var re = context.MakeMessage();
+                re.Text = "I have solution for " + selectedIntent + " TOP call generators. Please select the relevant options from below";
+                var qnAResults = QnAMaker.QnAFetchter.GetAnswers("Get " + selectedIntent + " Bot Options").Result;
+                //re.SuggestedActions = new SuggestedActions()
+                //{
+                //    Actions = new List<CardAction>()
+                //};
+                await context.SendTypingAcitivity();
+                //re.SuggestedActions = ResultCard.GetSuggestedQnAActions((qnAResults.Answers[0].AnswerAnswer + "," + others).Split(','));
+                ResultCard resultCard = new ResultCard();
+                resultCard.CustomQnACard(re, qnAResults);
+                await context.PostAsync(re);
+                context.Wait(HandleTopOncallGenerators);
             }
+            else
+            {
+                response.Text = others;
+                await this.HandleTopOncallGenerators(context, argument);
+            }
+
+            //switch (rk.TopScoringIntent.IntentIntent)
+            //{
+            //    case "outlook":
+            //        context.PrivateConversationData.SetValue("Intent", "Outlook");
+            //        context.PrivateConversationData.SetValue("IntentQuery", response.Text);
+            //        var re = context.MakeMessage();
+            //        re.Text = "I have solution for Outlook TOP call generators. Please select the relevant options from below";
+            //        var qnAResults = QnAMaker.QnAFetchter.GetAnswers("Get Outlook Bot Options").Result;
+            //        //re.SuggestedActions = new SuggestedActions()
+            //        //{
+            //        //    Actions = new List<CardAction>()
+            //        //};
+            //        await context.SendTypingAcitivity();
+            //        //re.SuggestedActions = ResultCard.GetSuggestedQnAActions((qnAResults.Answers[0].AnswerAnswer + "," + others).Split(','));
+            //        ResultCard resultCard = new ResultCard();
+            //        resultCard.CustomQnACard(re, qnAResults);
+            //        await context.PostAsync(re);
+            //        context.Wait(HandleTopOncallGenerators);
+            //        break;
+
+            //    case "mailbox":
+            //        context.PrivateConversationData.SetValue("Intent", "mailbox");
+            //        context.PrivateConversationData.SetValue("IntentQuery", response.Text);
+            //        re = context.MakeMessage();
+            //        re.Text = "I have solution for mailbox TOP call generators. Please select the relevant options from below";
+            //        qnAResults = QnAMaker.QnAFetchter.GetAnswers("Get mailbox Bot Options").Result;
+            //        re.SuggestedActions = new SuggestedActions()
+            //        {
+            //            Actions = new List<CardAction>()
+            //        };
+            //        await context.SendTypingAcitivity();
+            //        re.SuggestedActions = ResultCard.GetSuggestedQnAActions((qnAResults.Answers[0].AnswerAnswer + "," + others).Split(','));
+            //        await context.PostAsync(re);
+            //        context.Wait(HandleTopOncallGenerators);
+            //        break;
+
+            //    default:
+            //        response.Text = others;
+            //        await this.HandleTopOncallGenerators(context, argument);
+            //        break;
+            //}
         }
 
         private string others = "Others solution is not listed";

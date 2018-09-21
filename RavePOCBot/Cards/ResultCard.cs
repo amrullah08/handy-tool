@@ -6,6 +6,7 @@ using RavePOCBot.Dialogs;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using MediaWikiNET;
 
 namespace RavePOCBot.Cards
 {
@@ -13,6 +14,10 @@ namespace RavePOCBot.Cards
     {
         public void Card(IMessageActivity message)
         {
+            //MediaWiki mediaWiki = new MediaWiki("");
+            //MediaWikiNET.Models.SearchRequest searchRequest = new MediaWikiNET.Models.SearchRequest("");
+            //mediaWiki.Search(searchRequest);
+
             message.AttachmentLayout = AttachmentLayoutTypes.Carousel;
             message.Attachments = new List<Attachment>();
 
