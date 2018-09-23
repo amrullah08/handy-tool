@@ -83,7 +83,11 @@ namespace FastWayExcelReader
                     priceinfolist.Add(pricein);
                 }
             }
+            foreach(var PI in priceinfolist)
+            {
+                Console.WriteLine("weight = {0} zone = {1} price = {2}", PI.weight, PI.zone, PI.price);
 
+            }
         }
     }
 }
