@@ -88,6 +88,10 @@ namespace FastWayExcelReader
                 Console.WriteLine("weight = {0} zone = {1} price = {2}", PI.weight, PI.zone, PI.price);
 
             }
+
+            var k=priceinfolist.First(cc => cc.weight == "1.0");
+            Console.WriteLine("weight = {0} zone = {1} price = {2}", k.weight, k.zone, k.price);
+
         }
     }
 }
