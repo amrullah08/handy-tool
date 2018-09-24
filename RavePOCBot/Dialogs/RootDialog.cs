@@ -1,4 +1,5 @@
 ﻿using Microsoft.Bot.Builder.Dialogs;
+using Microsoft.Bot.Builder.PersonalityChat.Core;
 using Microsoft.Bot.Connector;
 using Microsoft.Integration.Bot.Helpers;
 using Newtonsoft.Json;
@@ -31,7 +32,7 @@ namespace RavePOCBot.Dialogs
             await context.SendTypingAcitivity();
             var selectedIntent = topOnCallTopics.FirstOrDefault(cc => cc.Equals(rk.TopScoringIntent.IntentIntent));
 
-            if (selectedIntent != null)
+            if(selectedIntent != null)
             {
                 context.PrivateConversationData.SetValue("Intent", selectedIntent);
                 context.PrivateConversationData.SetValue("IntentQuery", response.Text);
@@ -48,6 +49,25 @@ namespace RavePOCBot.Dialogs
                 resultCard.CustomQnACard(re, qnAResults);
                 await context.PostAsync(re);
                 context.Wait(HandleTopOncallGenerators);
+            }
+            else if (selectedIntent == null && rk.TopScoringIntent.IntentIntent.Equals("greeting"))
+            {
+                PersonalityChatOptions personalityChatOptions = new PersonalityChatOptions(string.Empty, PersonalityChatPersona.Professional);
+                PersonalityChatService personalityChatService = new PersonalityChatService(personalityChatOptions);
+
+                var PersonalityChatResults = Task.FromResult<PersonalityChatResults>(await personalityChatService.QueryServiceAsync(rk.Query));
+                string botOutput = PersonalityChatResults?.Result.ScenarioList?.FirstOrDefault()?.Responses?.FirstOrDefault() ?? "";
+
+                if (!string.IsNullOrEmpty(botOutput))
+                {
+                    await context.PostAsync(botOutput);
+                }
+
+                var reply = context.MakeMessage();
+                reply.Attachments = new List<Attachment>();
+                reply.Attachments.Add(ResultCard.ShowGreetingCard());
+                var k = QnAMaker.QnAFetchter.GetAnswers("Get Bot Options").Result;
+                await context.PostAsync(reply);
             }
             else
             {

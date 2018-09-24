@@ -64,6 +64,9 @@
       <HintPath>packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="MediaWiki.NET, Version=1.0.0.0, Culture=neutral, PublicKeyToken=595f0c3c92126b75, processorArchitecture=MSIL">
+      <HintPath>packages\MediaWiki.NET.1.0.0\lib\net45\MediaWiki.NET.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Azure.Documents.Client, Version=1.11.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>packages\Microsoft.Azure.DocumentDB.1.11.0\lib\net45\Microsoft.Azure.Documents.Client.dll</HintPath>
       <Private>True</Private>
@@ -91,6 +94,9 @@
     <Reference Include="Microsoft.Bot.Builder.History, Version=3.12.2.4, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>packages\Microsoft.Bot.Builder.History.3.12.2.4\lib\net46\Microsoft.Bot.Builder.History.dll</HintPath>
       <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Bot.Builder.PersonalityChat.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.Bot.Builder.PersonalityChat.Core.1.0.0-alpha-m1.0\lib\net46\Microsoft.Bot.Builder.PersonalityChat.Core.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Bot.Connector, Version=3.15.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>packages\Microsoft.Bot.Connector.3.15.3\lib\net46\Microsoft.Bot.Connector.dll</HintPath>
@@ -243,6 +249,7 @@
       <SubType>Designer</SubType>
     </Content>
     <Content Include="LuisBot.json" />
+    <Content Include="App_Data\smalltalk-classifier.json" />
     <None Include="Properties\PublishProfiles\syedamrullah - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\syedamrullah - Web Deploy.pubxml" />
     <None Include="Properties\PublishProfiles\syedamrullahravepoc - FTP.pubxml" />
