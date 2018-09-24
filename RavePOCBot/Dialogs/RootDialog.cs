@@ -207,7 +207,9 @@ namespace RavePOCBot.Dialogs
                 return;
             }
 
-            await context.PostAsync("PLEASE COLLECT THE RELEVANT Information (OFFCAT LOGS, ETL Logs. etc. ) for '" + context.PrivateConversationData.GetValue<string>("IntentQuery") + "' AND REACHOUT TO YOUR NEXT TEAM FOR FURTHER ASSISTANCE");
+            var qnAResults = QnAMaker.QnAFetchter.GetAnswers("get " + context.PrivateConversationData.GetValue<string>("Intent") + " last message").Result;
+
+            await context.PostAsync(qnAResults.Answers[0].AnswerAnswer);
             context.Done("");
         }
     }
