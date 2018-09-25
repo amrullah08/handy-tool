@@ -66,13 +66,18 @@ namespace RavePOCBot.Dialogs
                 if (!string.IsNullOrEmpty(botOutput))
                 {
                     await context.PostAsync(botOutput);
-                }
 
-                var reply = context.MakeMessage();
-                reply.Attachments = new List<Attachment>();
-                reply.Attachments.Add(ResultCard.ShowGreetingCard());
-                var k = QnAMaker.QnAFetchter.GetAnswers("Get Bot Options").Result;
-                await context.PostAsync(reply);
+                    var reply = context.MakeMessage();
+                    reply.Attachments = new List<Attachment>();
+                    reply.Attachments.Add(ResultCard.ShowGreetingCard());
+                    var k = QnAMaker.QnAFetchter.GetAnswers("Get Bot Options").Result;
+                    await context.PostAsync(reply);
+                }
+                else
+                {
+                    await context.SendTypingAcitivity();
+                    await this.HandleTopOncallGenerators(context, argument);
+                }
             }
             else
             {
