@@ -7,7 +7,6 @@
     using Services;
     using System;
     using System.Collections.Generic;
-    using System.Diagnostics;
     using System.Net;
     using System.Net.Http;
     using System.Threading.Tasks;
@@ -38,7 +37,7 @@
                     }
                     catch (Exception ex)
                     {
-                        Trace.TraceError(ex.ToString());
+                        System.Diagnostics.Trace.TraceError(ex.ToString());
                     }
                 }
 

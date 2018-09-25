@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
+using RavePOCBot.Common;
 
 namespace RavePOCBot.Dialogs
 {
@@ -18,8 +19,6 @@ namespace RavePOCBot.Dialogs
     {
         static string[] topOnCallTopics = QnAMaker.QnAFetchter.GetAnswers("Bot Custom Topics").
             Result.Answers[0].AnswerAnswer.Trim().Replace(" , ",",").Replace(" ,",",").Replace(", ",",").Split(',');
-        double maxQNAScore = Convert.ToDouble("60");
-        double maxLUIScore = Convert.ToDouble("0.6");
 
         Task IDialog<string>.StartAsync(IDialogContext context)
         {
@@ -31,31 +30,26 @@ namespace RavePOCBot.Dialogs
         {
             var response = await argument;
             await context.SendTypingAcitivity();
-            context.PrivateConversationData.SetValue("topic", response.Text);
+            context.PrivateConversationData.SetValue(StateConstants.Topic, response.Text);
             var rk = LuisFetcher.GetAnswers(response.Text.ToString()).Result;
             await context.SendTypingAcitivity();
-            var selectedIntent = topOnCallTopics.FirstOrDefault(cc => cc.Equals(rk.TopScoringIntent.IntentIntent) && rk.TopScoringIntent.Score > maxLUIScore);
+            var selectedIntent = topOnCallTopics.FirstOrDefault(cc => cc.Equals(rk.TopScoringIntent.IntentIntent) && rk.TopScoringIntent.Score > Constants.MaxLUIScore);
 
-            context.PrivateConversationData.SetValue("IntentQuery", response.Text);
+            context.PrivateConversationData.SetValue(StateConstants.IntentQuery, response.Text);
 
             if (selectedIntent != null)
             {
-                context.PrivateConversationData.SetValue("Intent", selectedIntent);
+                context.PrivateConversationData.SetValue(StateConstants.Intent, selectedIntent);
                 var re = context.MakeMessage();
                 re.Text = "I have solution for " + selectedIntent + " TOP call generators. Please select the relevant options from below";
                 var qnAResults = QnAMaker.QnAFetchter.GetAnswers("Get " + selectedIntent + " Bot Options").Result;
-                //re.SuggestedActions = new SuggestedActions()
-                //{
-                //    Actions = new List<CardAction>()
-                //};
                 await context.SendTypingAcitivity();
-                //re.SuggestedActions = ResultCard.GetSuggestedQnAActions((qnAResults.Answers[0].AnswerAnswer + "," + others).Split(','));
                 ResultCard resultCard = new ResultCard();
                 resultCard.CustomQnACard(re, qnAResults);
                 await context.PostAsync(re);
                 context.Wait(HandleTopOncallGenerators);
             }
-            else if (selectedIntent == null && rk.TopScoringIntent.IntentIntent.Equals("greeting") && rk.TopScoringIntent.Score > maxLUIScore)
+            else if (selectedIntent == null && rk.TopScoringIntent.IntentIntent.Equals("greeting") && rk.TopScoringIntent.Score > Constants.MaxLUIScore)
             {
                 PersonalityChatOptions personalityChatOptions = new PersonalityChatOptions(string.Empty, PersonalityChatPersona.Professional);
                 PersonalityChatService personalityChatService = new PersonalityChatService(personalityChatOptions);
@@ -84,48 +78,6 @@ namespace RavePOCBot.Dialogs
                 response.Text = others;
                 await this.HandleTopOncallGenerators(context, argument);
             }
-
-            //switch (rk.TopScoringIntent.IntentIntent)
-            //{
-            //    case "outlook":
-            //        context.PrivateConversationData.SetValue("Intent", "Outlook");
-            //        context.PrivateConversationData.SetValue("IntentQuery", response.Text);
-            //        var re = context.MakeMessage();
-            //        re.Text = "I have solution for Outlook TOP call generators. Please select the relevant options from below";
-            //        var qnAResults = QnAMaker.QnAFetchter.GetAnswers("Get Outlook Bot Options").Result;
-            //        //re.SuggestedActions = new SuggestedActions()
-            //        //{
-            //        //    Actions = new List<CardAction>()
-            //        //};
-            //        await context.SendTypingAcitivity();
-            //        //re.SuggestedActions = ResultCard.GetSuggestedQnAActions((qnAResults.Answers[0].AnswerAnswer + "," + others).Split(','));
-            //        ResultCard resultCard = new ResultCard();
-            //        resultCard.CustomQnACard(re, qnAResults);
-            //        await context.PostAsync(re);
-            //        context.Wait(HandleTopOncallGenerators);
-            //        break;
-
-            //    case "mailbox":
-            //        context.PrivateConversationData.SetValue("Intent", "mailbox");
-            //        context.PrivateConversationData.SetValue("IntentQuery", response.Text);
-            //        re = context.MakeMessage();
-            //        re.Text = "I have solution for mailbox TOP call generators. Please select the relevant options from below";
-            //        qnAResults = QnAMaker.QnAFetchter.GetAnswers("Get mailbox Bot Options").Result;
-            //        re.SuggestedActions = new SuggestedActions()
-            //        {
-            //            Actions = new List<CardAction>()
-            //        };
-            //        await context.SendTypingAcitivity();
-            //        re.SuggestedActions = ResultCard.GetSuggestedQnAActions((qnAResults.Answers[0].AnswerAnswer + "," + others).Split(','));
-            //        await context.PostAsync(re);
-            //        context.Wait(HandleTopOncallGenerators);
-            //        break;
-
-            //    default:
-            //        response.Text = others;
-            //        await this.HandleTopOncallGenerators(context, argument);
-            //        break;
-            //}
         }
 
         private string others = "Others solution is not listed";
@@ -166,7 +118,7 @@ namespace RavePOCBot.Dialogs
             if (!response.Text.Equals(others))
             {
                 var k = QnAMaker.QnAFetchter.GetAnswers(response.Text).Result;
-                if (k.Answers[0].Score > maxQNAScore)
+                if (k.Answers!=null && k.Answers[0].Score > Constants.MaxQNAScore)
                 {
                     await context.PostAsync(k.Answers[0].AnswerAnswer);
                 }
@@ -178,8 +130,8 @@ namespace RavePOCBot.Dialogs
             }
             else
             {
-                var k = QnAMaker.QnAFetchter.GetAnswers((context.PrivateConversationData.GetValue<string>("IntentQuery"))).Result;
-                if (k.Answers[0].Score > maxQNAScore)
+                var k = QnAMaker.QnAFetchter.GetAnswers((context.PrivateConversationData.GetValue<string>(StateConstants.IntentQuery))).Result;
+                if (k.Answers!=null && k.Answers[0].Score > Constants.MaxQNAScore)
                 {
                     await context.PostAsync(k.Answers[0].AnswerAnswer);
                 }
@@ -234,7 +186,7 @@ namespace RavePOCBot.Dialogs
 
             await context.SendTypingAcitivity();
 
-            await this.CustomSearch(context, context.PrivateConversationData.GetValue<string>("IntentQuery"));
+            await this.CustomSearch(context, context.PrivateConversationData.GetValue<string>(StateConstants.IntentQuery));
 
             ResultCard resultCard = new ResultCard();
             await resultCard.PostAsyncWithConvertToOptionsCard(context, "We have suggested possible options", issueSolvedCardAction);
@@ -253,12 +205,12 @@ namespace RavePOCBot.Dialogs
                 return;
             }
 
-            try
+            if (context.PrivateConversationData.ContainsKey(StateConstants.Intent))
             {
-                var qnAResults = QnAMaker.QnAFetchter.GetAnswers("get " + context.PrivateConversationData.GetValue<string>("Intent") + " last message").Result;
+                var qnAResults = QnAMaker.QnAFetchter.GetAnswers("get " + context.PrivateConversationData.GetValue<string>(StateConstants.Intent) + " last message").Result;
                 await context.PostAsync(qnAResults.Answers[0].AnswerAnswer);
             }
-            catch(KeyNotFoundException keynot)
+            else
             {
                 await context.PostAsync("i am not able to understand the question, while i am learning please contact our customer care");
             }
