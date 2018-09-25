@@ -16,7 +16,11 @@ namespace RavePOCBot.Dialogs
     [Serializable]
     public class RootDialog : IDialog<string>
     {
-        static string[] topOnCallTopics = QnAMaker.QnAFetchter.GetAnswers("Bot Custom Topics").Result.Answers[0].AnswerAnswer.Split(',');
+        static string[] topOnCallTopics = QnAMaker.QnAFetchter.GetAnswers("Bot Custom Topics").
+            Result.Answers[0].AnswerAnswer.Trim().Replace(" , ",",").Replace(" ,",",").Replace(", ",",").Split(',');
+        double maxQNAScore = Convert.ToDouble("60");
+        double maxLUIScore = Convert.ToDouble("0.6");
+
         Task IDialog<string>.StartAsync(IDialogContext context)
         {
             context.Wait(InitialUserQuery);
@@ -30,12 +34,13 @@ namespace RavePOCBot.Dialogs
             context.PrivateConversationData.SetValue("topic", response.Text);
             var rk = LuisFetcher.GetAnswers(response.Text.ToString()).Result;
             await context.SendTypingAcitivity();
-            var selectedIntent = topOnCallTopics.FirstOrDefault(cc => cc.Equals(rk.TopScoringIntent.IntentIntent));
+            var selectedIntent = topOnCallTopics.FirstOrDefault(cc => cc.Equals(rk.TopScoringIntent.IntentIntent) && rk.TopScoringIntent.Score > maxLUIScore);
 
-            if(selectedIntent != null)
+            context.PrivateConversationData.SetValue("IntentQuery", response.Text);
+
+            if (selectedIntent != null)
             {
                 context.PrivateConversationData.SetValue("Intent", selectedIntent);
-                context.PrivateConversationData.SetValue("IntentQuery", response.Text);
                 var re = context.MakeMessage();
                 re.Text = "I have solution for " + selectedIntent + " TOP call generators. Please select the relevant options from below";
                 var qnAResults = QnAMaker.QnAFetchter.GetAnswers("Get " + selectedIntent + " Bot Options").Result;
@@ -50,7 +55,7 @@ namespace RavePOCBot.Dialogs
                 await context.PostAsync(re);
                 context.Wait(HandleTopOncallGenerators);
             }
-            else if (selectedIntent == null && rk.TopScoringIntent.IntentIntent.Equals("greeting"))
+            else if (selectedIntent == null && rk.TopScoringIntent.IntentIntent.Equals("greeting") && rk.TopScoringIntent.Score > maxLUIScore)
             {
                 PersonalityChatOptions personalityChatOptions = new PersonalityChatOptions(string.Empty, PersonalityChatPersona.Professional);
                 PersonalityChatService personalityChatService = new PersonalityChatService(personalityChatOptions);
@@ -156,12 +161,28 @@ namespace RavePOCBot.Dialogs
             if (!response.Text.Equals(others))
             {
                 var k = QnAMaker.QnAFetchter.GetAnswers(response.Text).Result;
-                await context.PostAsync(k.Answers[0].AnswerAnswer);
+                if (k.Answers[0].Score > maxQNAScore)
+                {
+                    await context.PostAsync(k.Answers[0].AnswerAnswer);
+                }
+                else
+                {
+                    await this.DoYouWantMoreQna(context, argument);
+                    return;
+                }
             }
             else
             {
                 var k = QnAMaker.QnAFetchter.GetAnswers((context.PrivateConversationData.GetValue<string>("IntentQuery"))).Result;
-                await context.PostAsync(k.Answers[0].AnswerAnswer);
+                if (k.Answers[0].Score > maxQNAScore)
+                {
+                    await context.PostAsync(k.Answers[0].AnswerAnswer);
+                }
+                else
+                {
+                    await this.DoYouWantMoreQna(context, argument);
+                    return;
+                }
             }
             ResultCard resultCard = new ResultCard();
             await resultCard.PostAsyncWithConvertToOptionsCard(context, "Did this help you?", issueSolvedCardAction);
@@ -227,9 +248,15 @@ namespace RavePOCBot.Dialogs
                 return;
             }
 
-            var qnAResults = QnAMaker.QnAFetchter.GetAnswers("get " + context.PrivateConversationData.GetValue<string>("Intent") + " last message").Result;
-
-            await context.PostAsync(qnAResults.Answers[0].AnswerAnswer);
+            try
+            {
+                var qnAResults = QnAMaker.QnAFetchter.GetAnswers("get " + context.PrivateConversationData.GetValue<string>("Intent") + " last message").Result;
+                await context.PostAsync(qnAResults.Answers[0].AnswerAnswer);
+            }
+            catch(KeyNotFoundException keynot)
+            {
+                await context.PostAsync("i am not able to understand the question, while i am learning please contact our customer care");
+            }
             context.Done("");
         }
     }

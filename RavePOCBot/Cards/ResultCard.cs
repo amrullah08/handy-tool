@@ -144,7 +144,7 @@ namespace RavePOCBot.Cards
             message.AttachmentLayout = AttachmentLayoutTypes.Carousel;
             message.Attachments = new List<Attachment>();
 
-            foreach (var cardContent in qnAResult.Answers[0].AnswerAnswer.Split(','))
+            foreach (var cardContent in qnAResult.Answers[0].AnswerAnswer.Replace(" , ", ",").Replace(" ,", ",").Replace(", ", ",").Split(','))
             {
                 List<AdaptiveElement> items = new List<AdaptiveElement>();
 
