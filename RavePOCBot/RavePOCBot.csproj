@@ -67,6 +67,9 @@
     <Reference Include="MediaWiki.NET, Version=1.0.0.0, Culture=neutral, PublicKeyToken=595f0c3c92126b75, processorArchitecture=MSIL">
       <HintPath>packages\MediaWiki.NET.1.0.0\lib\net45\MediaWiki.NET.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.ApplicationInsights, Version=2.7.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.ApplicationInsights.2.7.2\lib\net46\Microsoft.ApplicationInsights.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Azure.Documents.Client, Version=1.11.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>packages\Microsoft.Azure.DocumentDB.1.11.0\lib\net45\Microsoft.Azure.Documents.Client.dll</HintPath>
       <Private>True</Private>
@@ -151,6 +154,9 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Diagnostics.DiagnosticSource, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>packages\System.Diagnostics.DiagnosticSource.4.5.0\lib\net46\System.Diagnostics.DiagnosticSource.dll</HintPath>
+    </Reference>
     <Reference Include="System.IdentityModel.Tokens.Jwt, Version=5.1.4.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>packages\System.IdentityModel.Tokens.Jwt.5.1.4\lib\net451\System.IdentityModel.Tokens.Jwt.dll</HintPath>
     </Reference>
@@ -222,10 +228,15 @@
   <ItemGroup>
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Cards\ResultCard.cs" />
+    <Compile Include="Common\Constants.cs" />
+    <Compile Include="Common\ITelemetryHelper.cs" />
     <Compile Include="Common\LuisFetcher.cs" />
     <Compile Include="Common\LuisResult.cs" />
     <Compile Include="Common\QnAResult.cs" />
     <Compile Include="Common\Serialize.cs" />
+    <Compile Include="Common\StateConstants.cs" />
+    <Compile Include="Common\TelemetryConstants.cs" />
+    <Compile Include="Common\TelemetryHelper.cs" />
     <Compile Include="Controllers\MessagesController.cs" />
     <Compile Include="DialogContextHelper.cs" />
     <Compile Include="Dialogs\OutLookDialog.cs" />
