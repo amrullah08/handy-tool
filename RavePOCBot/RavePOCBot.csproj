@@ -242,6 +242,7 @@
     <Compile Include="Dialogs\OutLookDialog.cs" />
     <Compile Include="Dialogs\QnADialog.cs" />
     <Compile Include="Dialogs\RootDialog.cs" />
+    <None Include="Dialogs\RootDialog.cs.beforeprobing" />
     <Compile Include="Dialogs\RootLuisDialog.cs" />
     <Compile Include="Dialogs\SearchCard.cs" />
     <Compile Include="Global.asax.cs">
