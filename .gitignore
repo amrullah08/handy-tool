@@ -31,3 +31,9 @@
 /**/packages
 /**/bin
 /**/obj
+/FordPOCBot/Properties/PublishProfiles
+/FordPOCBot/Web.Release.config
+/FordPOCBot/Web.Debug.config
+/FordPOCBot/Web.config
+/FordPOCBot/default1.htm
+/FordPOCBot/default.htm

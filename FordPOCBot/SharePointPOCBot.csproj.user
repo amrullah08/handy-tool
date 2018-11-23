@@ -9,7 +9,7 @@
     <IISExpressWindowsAuthentication />
     <IISExpressUseClassicPipelineMode />
     <UseGlobalApplicationHostFile />
-    <NameOfLastUsedPublishProfile>syedamrullahravepoc - Web Deploy</NameOfLastUsedPublishProfile>
+    <NameOfLastUsedPublishProfile>syedeiptestbot - Web Deploy</NameOfLastUsedPublishProfile>
   </PropertyGroup>
   <ProjectExtensions>
     <VisualStudio>
