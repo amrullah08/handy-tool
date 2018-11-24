@@ -214,6 +214,7 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="App_Data\adaptivecard - Copy.json" />
     <None Include="App_Data\adaptivecard.json" />
     <Content Include="Content\custom.css" />
     <Content Include="Content\static.en.b-blessed1.css" />

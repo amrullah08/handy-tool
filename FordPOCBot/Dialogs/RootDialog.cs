@@ -45,6 +45,7 @@ namespace RavePOCBot.Dialogs
             reply.Attachments.Add(supportQuestionnaireCard.OnlyDateForm());
 
             reply.Attachments.Add(supportQuestionnaireCard.GetEndOfConversatoin());
+            reply.Attachments.Add(supportQuestionnaireCard.OnlySubmitForm());
 
             await context.PostAsync(reply);
 

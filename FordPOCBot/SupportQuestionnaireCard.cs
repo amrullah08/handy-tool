@@ -181,5 +181,26 @@ namespace Microsoft.Integration.Bot.Cards
                 Name = "Card"
             };
         }
+        public Attachment OnlySubmitForm()
+        {
+
+            AdaptiveCard card = new AdaptiveCard()
+            {
+                Actions = new List<AdaptiveAction>()
+                {
+                    new AdaptiveSubmitAction()
+                    {
+                        Title = "Start new Conversation"
+                    }
+                }
+            };
+
+            Attachment attachment = new Attachment()
+            {
+                ContentType = AdaptiveCard.ContentType,
+                Content = card
+            };
+            return attachment;
+        }
     }
 }
