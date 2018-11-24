@@ -42,10 +42,10 @@ namespace RavePOCBot.Dialogs
 
             var reply = context.MakeMessage();
             reply.Attachments = new List<Attachment>();
-            reply.Attachments.Add(supportQuestionnaireCard.OnlyDateForm());
+            reply.Attachments.Add(supportQuestionnaireCard.GetCalendarAttachment());
 
-            reply.Attachments.Add(supportQuestionnaireCard.GetEndOfConversatoin());
-            reply.Attachments.Add(supportQuestionnaireCard.OnlySubmitForm());
+            reply.Attachments.Add(supportQuestionnaireCard.GetEmailFeedbackAttachment());
+            reply.Attachments.Add(supportQuestionnaireCard.GetStartNewConversationAttachment());
 
             await context.PostAsync(reply);
 

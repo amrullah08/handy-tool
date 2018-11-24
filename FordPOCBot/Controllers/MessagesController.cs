@@ -89,7 +89,7 @@
 
                                 var reply = ((Activity)iConversationUpdated).CreateReply();
                                 reply.Attachments = new List<Attachment>();
-                                reply.Attachments.Add(supportQuestionnaireCard.QuestionnaireForm());
+                                reply.Attachments.Add(supportQuestionnaireCard.GetQuestionnaireFormAttachment());
                                 //reply.SuggestedActions = ResultCard.GetSuggestedQnAActions(k.Answers[0].AnswerAnswer.Split(','));
                                 connector.Conversations.ReplyToActivityAsync(reply);
 
