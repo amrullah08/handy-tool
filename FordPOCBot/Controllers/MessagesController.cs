@@ -89,12 +89,10 @@
 
                                 var reply = ((Activity)iConversationUpdated).CreateReply();
                                 reply.Attachments = new List<Attachment>();
-
-                                reply.Attachments.Add(ResultCard.ShowGreetingCard());
-                                var k = QnAMaker.QnAFetchter.GetAnswers("Get Bot Options").Result;
                                 reply.Attachments.Add(supportQuestionnaireCard.QuestionnaireForm());
                                 //reply.SuggestedActions = ResultCard.GetSuggestedQnAActions(k.Answers[0].AnswerAnswer.Split(','));
                                 connector.Conversations.ReplyToActivityAsync(reply);
+
                             }
                         }
                     }

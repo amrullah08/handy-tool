@@ -12,6 +12,7 @@ namespace Microsoft.Integration.Bot.Cards
     using System;
     using System.Collections.Generic;
     using System.Globalization;
+    using System.Web;
     using AdaptiveCards;
     using Microsoft.Bot.Connector;
 
@@ -165,6 +166,20 @@ namespace Microsoft.Integration.Bot.Cards
                 Content = card
             };
             return attachment;
+        }
+
+        public Attachment GetEndOfConversatoin()
+        {
+            string content = (System.IO.File.ReadAllText(HttpContext.Current.Server.MapPath("/app_data/adaptivecard.json")));
+
+            var results = AdaptiveCard.FromJson(content);
+            var card = results.Card;
+            return new Attachment()
+            {
+                Content = card,
+                ContentType = AdaptiveCard.ContentType,
+                Name = "Card"
+            };
         }
     }
 }

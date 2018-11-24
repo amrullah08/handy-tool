@@ -36,39 +36,6 @@
             await result;
             context.Wait(this.MessageReceived);
         }
-
-        private void CustomSearch(IDialogContext context, string text)
-        {
-            var subscriptionKey = System.Configuration.ConfigurationManager.AppSettings["BingCustomSearchKey"];
-            var customConfigId = System.Configuration.ConfigurationManager.AppSettings["BingConfigId"];
-            var searchTerm = text;
-
-            var url = "https://api.cognitive.microsoft.com/bingcustomsearch/v7.0/search?" +
-                "q=" + searchTerm +
-                "&customconfig=" + customConfigId;
-
-            var client = new HttpClient();
-            client.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Key", subscriptionKey);
-            var httpResponseMessage = client.GetAsync(url).Result;
-            var responseContent = httpResponseMessage.Content.ReadAsStringAsync().Result;
-            BingCustomSearchResponse response = JsonConvert.DeserializeObject<BingCustomSearchResponse>(responseContent);
-
-            ResultCard resultCard = new ResultCard();
-
-            IMessageActivity msg = context.MakeMessage();
-            msg.SuggestedActions = ResultCard.GetSuggestedActions();
-            resultCard.CustomCard(msg, response.webPages);
-            context.PostAsync(msg);
-        }
-
-        [LuisIntent("Help")]
-        public async Task Help(IDialogContext context, LuisResult result)
-        {
-            context.SendTypingAcitivity();
-            this.CustomSearch(context, result.Query);
-            var k = new QnAMakerService(new QnAMakerAttribute(WebConfigurationManager.AppSettings["QNAAuthKey"], WebConfigurationManager.AppSettings["QNAKnowledgeBaseId"], "Sorry Could not get that", .3, endpointHostName: WebConfigurationManager.AppSettings["QNAEndpointUrl"]));
-            await context.Forward(new QnADialog(k), this.ResumeAfter, context.Activity, CancellationToken.None);
-        }
     }
 
     public class BingCustomSearchResponse
