@@ -1,4 +1,4 @@
-﻿namespace RavePOCBot.Dialogs
+﻿namespace FordPOCBot.Dialogs
 {
     using Microsoft.Bot.Builder.CognitiveServices.QnAMaker;
     using Microsoft.Bot.Builder.Dialogs;
@@ -7,7 +7,7 @@
     using Microsoft.Bot.Connector;
     using Microsoft.Integration.Bot.Helpers;
     using Newtonsoft.Json;
-    using RavePOCBot.Cards;
+    using FordPOCBot.Cards;
     using System;
     using System.Net.Http;
     using System.Threading;

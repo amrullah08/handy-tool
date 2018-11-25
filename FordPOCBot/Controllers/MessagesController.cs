@@ -1,10 +1,10 @@
-﻿namespace RavePOCBot
+﻿namespace FordPOCBot
 {
     using Dialogs;
     using Microsoft.Bot.Builder.Dialogs;
     using Microsoft.Bot.Connector;
     using Microsoft.Integration.Bot.Cards;
-    using RavePOCBot.Cards;
+    using FordPOCBot.Cards;
     using Services;
     using System;
     using System.Collections.Generic;

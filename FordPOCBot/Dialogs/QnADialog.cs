@@ -6,7 +6,7 @@
 // </summary>
 //-----------------------------------------------------------------------
 
-namespace RavePOCBot.Dialogs
+namespace FordPOCBot.Dialogs
 {
     using Microsoft.Bot.Builder.CognitiveServices.QnAMaker;
     using Microsoft.Bot.Builder.Dialogs;

@@ -1,4 +1,4 @@
-﻿namespace RavePOCBot.Services
+﻿namespace FordPOCBot.Services
 {
     public class BingSpellCheckSuggestion
     {

@@ -1,4 +1,4 @@
-﻿namespace RavePOCBot.Common
+﻿namespace FordPOCBot.Common
 {
     using Newtonsoft.Json;
 
@@ -31,6 +31,6 @@
 
     public partial class QnAResult
     {
-        public static QnAResult FromJson(string json) => JsonConvert.DeserializeObject<QnAResult>(json, RavePOCBot.Common.Serialize.Settings);
+        public static QnAResult FromJson(string json) => JsonConvert.DeserializeObject<QnAResult>(json, FordPOCBot.Common.Serialize.Settings);
     }
 }

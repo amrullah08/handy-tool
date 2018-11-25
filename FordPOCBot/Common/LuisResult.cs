@@ -25,7 +25,7 @@ namespace QuickType
         [JsonProperty("sentimentAnalysis")]
         public SentimentAnalysis SentimentAnalysis { get; set; }
 
-        public static LuisResult FromJson(string json) => JsonConvert.DeserializeObject<LuisResult>(json, RavePOCBot.Common.Serialize.Settings);
+        public static LuisResult FromJson(string json) => JsonConvert.DeserializeObject<LuisResult>(json, FordPOCBot.Common.Serialize.Settings);
     }
 
     public partial class Intent

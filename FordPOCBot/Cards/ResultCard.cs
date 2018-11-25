@@ -1,14 +1,14 @@
 ﻿using AdaptiveCards;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Connector;
-using RavePOCBot.Common;
-using RavePOCBot.Dialogs;
+using FordPOCBot.Common;
+using FordPOCBot.Dialogs;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using MediaWikiNET;
 
-namespace RavePOCBot.Cards
+namespace FordPOCBot.Cards
 {
     public class ResultCard
     {

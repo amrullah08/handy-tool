@@ -1,4 +1,4 @@
-﻿namespace RavePOCBot
+﻿namespace FordPOCBot
 {
     using Autofac;
     using Microsoft.Bot.Builder.Azure;

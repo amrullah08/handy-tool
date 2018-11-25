@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using System.Globalization;
 
-namespace RavePOCBot.Common
+namespace FordPOCBot.Common
 {
     public static class Serialize
     {

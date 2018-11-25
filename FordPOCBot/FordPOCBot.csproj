@@ -12,8 +12,8 @@
     <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>RavePOCBot</RootNamespace>
-    <AssemblyName>RavePOCBot</AssemblyName>
+    <RootNamespace>FordPOCBot</RootNamespace>
+    <AssemblyName>FordPOCBot</AssemblyName>
     <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
     <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort />
@@ -242,13 +242,10 @@
     <Compile Include="Controllers\MessagesController.cs" />
     <Compile Include="CustomCalendarForm.cs" />
     <Compile Include="DialogContextHelper.cs" />
-    <Compile Include="Dialogs\OutLookDialog.cs" />
     <Compile Include="Dialogs\QnADialog.cs" />
     <Compile Include="Dialogs\RootDialog.cs" />
-    <Compile Include="SupportQuestionnaireCard.cs" />
-    <None Include="Dialogs\RootDialog.cs.beforeprobing" />
+    <Compile Include="Cards\SupportQuestionnaireCard.cs" />
     <Compile Include="Dialogs\RootLuisDialog.cs" />
-    <Compile Include="Dialogs\SearchCard.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>

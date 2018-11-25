@@ -4,18 +4,18 @@ using Microsoft.Bot.Connector;
 using Microsoft.Integration.Bot.Helpers;
 using Newtonsoft.Json;
 using QnAMaker;
-using RavePOCBot.Cards;
+using FordPOCBot.Cards;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
-using RavePOCBot.Common;
+using FordPOCBot.Common;
 using Newtonsoft.Json.Linq;
 using Microsoft.Bot.Builder.FormFlow;
 using Microsoft.Integration.Bot.Cards;
 
-namespace RavePOCBot.Dialogs
+namespace FordPOCBot.Dialogs
 {
     [Serializable]
     public class RootDialog : IDialog<string>

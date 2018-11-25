@@ -1,4 +1,4 @@
-﻿namespace RavePOCBot
+﻿namespace FordPOCBot
 {
     using Newtonsoft.Json;
     using Newtonsoft.Json.Serialization;
