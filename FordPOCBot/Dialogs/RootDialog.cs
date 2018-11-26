@@ -160,6 +160,7 @@ namespace FordPOCBot.Dialogs
 
         private async Task HandleFeedback(IDialogContext context, IAwaitable<object> result)
         {
+            await context.PostAsync("Thank you for valuable feedback. we will work on improving experience")
             context.Done("Completed Conversation");
             await context.PostAsync("");
         }

@@ -24,7 +24,7 @@ namespace FordPOCBot.Cards
                                     new AdaptiveImage()
                                     {
                                         Size= AdaptiveImageSize.Auto,
-                                        Url = new Uri("https://rave.office.net/api/download/publicBlob?fileURL=https%3a%2f%2fwebrave.blob.core.windows.net%2fpublic%2fimages%2fRave_DJ_2.gif")
+                                        Url = new Uri("https://pbs.twimg.com/profile_images/892474147569377281/e60htCEm_400x400.jpg")
                                     }
                                 }
             };
