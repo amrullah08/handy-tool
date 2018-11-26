@@ -12,6 +12,19 @@ namespace FordPOCBot.Cards
 {
     public class ResultCard
     {
+        public static Attachment GetVideoCard(string title, string subtitle, string text, MediaUrl cardImage)
+        {
+            var heroCard = new VideoCard
+            {
+                Title = title,
+                Subtitle = subtitle,
+                Text = text,
+                Media = new List<MediaUrl>()
+            };
+
+            return heroCard.ToAttachment();
+        }
+
 
         public static Attachment ShowGreetingCard()
         {

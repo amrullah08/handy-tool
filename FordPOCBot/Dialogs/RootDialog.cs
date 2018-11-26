@@ -37,15 +37,21 @@ namespace FordPOCBot.Dialogs
                 case "FordSiteInfo":
                     var answer = QnAMaker.QnAFetchter.GetAnswers("whats this site?").
             Result.Answers[0].AnswerAnswer;
+                    MediaUrl mediaUrl = new MediaUrl("https://marczak.io/images/botseries-rich-cards/CreatingBot.mp4");
                     await context.PostAsync(answer);
-                    context.Wait(DisplayFeedback);
+                    var k = ResultCard.GetVideoCard("Welcome to Leadership Learning Site", "", "Ford HR ", mediaUrl);
+                    var reply = context.MakeMessage();
+                    reply.Attachments = new List<Attachment>();
+                    reply.Attachments.Add(k);
+                    await context.PostAsync(reply);
+                    context.Done("competed");
                     break;
                 case "FordCurrentAffair":
                     answer = QnAMaker.QnAFetchter.GetAnswers("Whats cooking?").
             Result.Answers[0].AnswerAnswer;
                     await context.PostAsync(answer);
                     ResultCard result = new ResultCard();
-                    var reply = context.MakeMessage();
+                    reply = context.MakeMessage();
                     reply.Text = "Would you like to learn more?";
                     reply.SuggestedActions = ResultCard.GetSuggestedQnAActions(new[] { "yes", "no" });
                     await context.PostAsync(reply);
@@ -131,7 +137,7 @@ namespace FordPOCBot.Dialogs
             if (response.Text.Equals("no"))
             {
                 await context.PostAsync("Is there anything else I can help you with?");
-                context.Wait(DisplayFeedback);
+                context.Done("completed");
             }
             else
             {
@@ -162,7 +168,6 @@ namespace FordPOCBot.Dialogs
         {
             await context.PostAsync("Thank you for valuable feedback. we will work on improving experience");
             context.Done("Completed Conversation");
-            await context.PostAsync("");
         }
 
         private async Task DisplayFeedback(IDialogContext context)
