@@ -85,11 +85,10 @@
                             // if the bot is added, then
                             if (member.Id == iConversationUpdated.Recipient.Id)
                             {
-                                SupportQuestionnaireCard supportQuestionnaireCard = new SupportQuestionnaireCard();
-
+                                ResultCard card = new ResultCard();
                                 var reply = ((Activity)iConversationUpdated).CreateReply();
                                 reply.Attachments = new List<Attachment>();
-                                reply.Attachments.Add(supportQuestionnaireCard.GetQuestionnaireFormAttachment());
+                                reply.Attachments.Add(ResultCard.ShowGreetingCard());
                                 //reply.SuggestedActions = ResultCard.GetSuggestedQnAActions(k.Answers[0].AnswerAnswer.Split(','));
                                 connector.Conversations.ReplyToActivityAsync(reply);
 
