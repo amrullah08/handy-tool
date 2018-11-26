@@ -87,6 +87,11 @@ namespace FordPOCBot.Dialogs
                 await context.PostAsync(reply);
                 context.Wait(CompleteTraining);
             }
+            else
+            {
+                await context.PostAsync("This type of training is not supported");
+                context.Done("completed");
+            }
         }
 
         private async Task CompleteTraining(IDialogContext context, IAwaitable<IMessageActivity> result)
@@ -99,6 +104,11 @@ namespace FordPOCBot.Dialogs
                 reply.Text = FordResources.TrainingRequest;
                 await context.PostAsync(reply);
                 context.Wait(DisplayFeedback);
+            }
+            else
+            {
+                await context.PostAsync("training in evening is not supported");
+                context.Done("completed");
             }
         }
 
@@ -113,6 +123,11 @@ namespace FordPOCBot.Dialogs
                 reply.SuggestedActions = ResultCard.GetSuggestedQnAActions(new[] { "Bite Size Content", "Online Training Program" });
                 await context.PostAsync(reply);
                 context.Wait(HandleModelTrainingComplete);
+            }
+            else
+            {
+                await context.PostAsync("This type of model thinking is not supported");
+                context.Done("completed");
             }
         }
 
