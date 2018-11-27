@@ -1,9 +1,10 @@
-﻿namespace RavePOCBot
+﻿namespace FordPOCBot
 {
     using Dialogs;
     using Microsoft.Bot.Builder.Dialogs;
     using Microsoft.Bot.Connector;
-    using RavePOCBot.Cards;
+    using Microsoft.Integration.Bot.Cards;
+    using FordPOCBot.Cards;
     using Services;
     using System;
     using System.Collections.Generic;
@@ -84,13 +85,13 @@
                             // if the bot is added, then
                             if (member.Id == iConversationUpdated.Recipient.Id)
                             {
+                                ResultCard card = new ResultCard();
                                 var reply = ((Activity)iConversationUpdated).CreateReply();
                                 reply.Attachments = new List<Attachment>();
-
                                 reply.Attachments.Add(ResultCard.ShowGreetingCard());
-                                var k = QnAMaker.QnAFetchter.GetAnswers("Get Bot Options").Result;
                                 //reply.SuggestedActions = ResultCard.GetSuggestedQnAActions(k.Answers[0].AnswerAnswer.Split(','));
                                 connector.Conversations.ReplyToActivityAsync(reply);
+
                             }
                         }
                     }

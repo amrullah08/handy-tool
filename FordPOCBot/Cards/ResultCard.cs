@@ -1,17 +1,126 @@
 ﻿using AdaptiveCards;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Connector;
-using RavePOCBot.Common;
-using RavePOCBot.Dialogs;
+using FordPOCBot.Common;
+using FordPOCBot.Dialogs;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using MediaWikiNET;
 
-namespace RavePOCBot.Cards
+namespace FordPOCBot.Cards
 {
     public class ResultCard
     {
+        public static Attachment GetVideoCard(string title, string subtitle, string text, MediaUrl cardImage)
+        {
+            var heroCard = new VideoCard
+            {
+                Title = title,
+                Subtitle = subtitle,
+                Text = text,
+                Media = new List<MediaUrl>()
+            };
+
+            return heroCard.ToAttachment();
+        }
+
+
+        public static Attachment ShowGreetingCard()
+        {
+            AdaptiveContainer adaptiveContainer = new AdaptiveContainer();
+            AdaptiveColumnSet adaptiveColumnSet = new AdaptiveColumnSet();
+            AdaptiveColumn adaptiveColumn = new AdaptiveColumn()
+            {
+                Items = new List<AdaptiveElement>()
+                                {
+                                    new AdaptiveImage()
+                                    {
+                                        Size= AdaptiveImageSize.Auto,
+                                        Url = new Uri("https://pbs.twimg.com/profile_images/892474147569377281/e60htCEm_400x400.jpg")
+                                    }
+                                }
+            };
+            adaptiveColumnSet.Columns.Add(adaptiveColumn);
+
+            adaptiveColumn = new AdaptiveColumn()
+            {
+                Items = new List<AdaptiveElement>()
+                                {
+                                    new AdaptiveTextBlock()
+                                    {
+                                        Text = FordResources.GreetUser,
+                                        Weight = AdaptiveTextWeight.Bolder,
+                                        Wrap = true
+                                    },
+                                    new AdaptiveTextBlock()
+                                    {
+                                        Text = FordResources.BotGreeting,
+                                        Weight = AdaptiveTextWeight.Bolder,
+                                        Size = AdaptiveTextSize.Small,
+                                        Wrap = true
+                                    }
+                                }
+            };
+            adaptiveColumnSet.Columns.Add(adaptiveColumn);
+            adaptiveContainer.Items.Add(adaptiveColumnSet);
+
+            AdaptiveCard adaptiveCard = new AdaptiveCard();
+            adaptiveCard.Body.Add(adaptiveContainer);
+
+            Attachment attachment = new Attachment()
+            {
+                ContentType = AdaptiveCard.ContentType,
+                Content = adaptiveCard
+            };
+            return attachment;
+        }
+
+        public Attachment FeedBack()
+        {
+
+            List<AdaptiveElement> body = new List<AdaptiveElement>();
+            body.Add(
+                                    new AdaptiveTextBlock()
+                                    {
+                                        Text = "Can you please tell me more about your experience??",
+                                        Weight = AdaptiveTextWeight.Bolder,
+                                        Wrap = true,
+                                        Separator = true
+                                    });
+
+            //foreach (var item in keyValuePairs)
+            {
+                body.Add(
+                new AdaptiveTextInput()
+                {
+                    Id = "enter your feedback here",
+                    Placeholder = "enter your feedback here",
+                    IsMultiline=true 
+                });
+            }
+
+
+            AdaptiveCard card = new AdaptiveCard()
+            {
+                Body = body,
+                Actions = new List<AdaptiveAction>()
+                {
+                    new AdaptiveSubmitAction()
+                    {
+                        Title = "Submit Feedback"
+                    }
+                }
+            };
+
+            Attachment attachment = new Attachment()
+            {
+                ContentType = AdaptiveCard.ContentType,
+                Content = card
+            };
+            return attachment;
+        }
+
         public void Card(IMessageActivity message)
         {
             //MediaWiki mediaWiki = new MediaWiki("");
@@ -167,120 +276,6 @@ namespace RavePOCBot.Cards
             }
         }
 
-        public static Attachment ShowGreetingCard()
-        {
-            AdaptiveContainer adaptiveContainer = new AdaptiveContainer();
-            AdaptiveColumnSet adaptiveColumnSet = new AdaptiveColumnSet();
-            AdaptiveColumn adaptiveColumn = new AdaptiveColumn()
-            {
-                Items = new List<AdaptiveElement>()
-                                {
-                                    new AdaptiveImage()
-                                    {
-                                        Size= AdaptiveImageSize.Auto,
-                                        Url = new Uri("https://rave.office.net/api/download/publicBlob?fileURL=https%3a%2f%2fwebrave.blob.core.windows.net%2fpublic%2fimages%2fRave_DJ_2.gif")
-                                    }
-                                }
-            };
-            adaptiveColumnSet.Columns.Add(adaptiveColumn);
-
-            //adaptiveColumn = new AdaptiveColumn()
-            //{
-            //    Items = new List<AdaptiveElement>()
-            //                    {
-            //                        new AdaptiveTextBlock()
-            //                        {
-            //                            Text=""
-            //                        }
-            //                    }
-            //};
-            //adaptiveColumnSet.Columns.Add(adaptiveColumn);
-
-            //adaptiveColumn = new AdaptiveColumn()
-            //{
-            //    Items = new List<AdaptiveElement>()
-            //                    {
-            //                        new AdaptiveTextBlock()
-            //                        {
-            //                            Text=""
-            //                        }
-            //                    }
-            //};
-            //adaptiveColumnSet.Columns.Add(adaptiveColumn);
-
-            adaptiveColumn = new AdaptiveColumn()
-            {
-                Items = new List<AdaptiveElement>()
-                                {
-                                    new AdaptiveTextBlock()
-                                    {
-                                        Text = "I am The "+ System.Configuration.ConfigurationManager.AppSettings["Company"] + " Assistant.",
-                                        Weight = AdaptiveTextWeight.Bolder,
-                                        Wrap = true
-                                    },
-                                    new AdaptiveTextBlock()
-                                    {
-                                        Text = "How can i help you today?",
-                                        Weight = AdaptiveTextWeight.Bolder,
-                                        Size = AdaptiveTextSize.Small,
-                                        Wrap = true
-                                    }
-                                }
-            };
-            adaptiveColumnSet.Columns.Add(adaptiveColumn);
-            adaptiveContainer.Items.Add(adaptiveColumnSet);
-
-            AdaptiveCard adaptiveCard = new AdaptiveCard();
-            adaptiveCard.Body.Add(adaptiveContainer);
-
-            Attachment attachment = new Attachment()
-            {
-                ContentType = AdaptiveCard.ContentType,
-                Content = adaptiveCard
-            };
-            return attachment;
-        }
-
-        private static Attachment GetHeroCard(string title, string subtitle, string text, CardImage cardImage, CardAction cardAction)
-        {
-            var heroCard = new HeroCard
-            {
-                Title = title,
-                Subtitle = subtitle,
-                Text = text,
-                Images = new List<CardImage>() { cardImage },
-                Buttons = new List<CardAction>() { cardAction },
-            };
-
-            return heroCard.ToAttachment();
-        }
-
-        public static Attachment GetThumbnailCard(string title, string subtitle, string text, CardImage cardImage, CardAction cardAction)
-        {
-            var heroCard = new ThumbnailCard
-            {
-                Title = title,
-                Subtitle = subtitle,
-                Text = text,
-                Images = new List<CardImage>() { cardImage },
-                Buttons = new List<CardAction>() { cardAction },
-            };
-
-            return heroCard.ToAttachment();
-        }
-
-        public static SuggestedActions GetSuggestedActions()
-        {
-            return new SuggestedActions()
-            {
-                Actions = new List<CardAction>()
-                {
-                    new CardAction(){ Title = "Trobuleshootin", Type=ActionTypes.PostBack, Value=$"Trobuleshootin" },
-                    new CardAction(){ Title = "Performance", Type=ActionTypes.PostBack, Value=$"performacne" }
-                }
-            };
-        }
-
         public static SuggestedActions GetSuggestedQnAActions(string[] result)
         {
             var k = new SuggestedActions()
@@ -290,19 +285,6 @@ namespace RavePOCBot.Cards
             foreach (var r in result)
             {
                 k.Actions.Add(new CardAction() { Title = r, Type = ActionTypes.PostBack, Value = $"{r}" });
-            }
-            return k;
-        }
-
-        public static SuggestedActions GetSuggestedQnAActions(QnAResult qnAResult)
-        {
-            var k = new SuggestedActions()
-            {
-                Actions = new List<CardAction>()
-            };
-            foreach (var r in qnAResult.Answers)
-            {
-                k.Actions.Add(new CardAction() { Title = r.AnswerAnswer, Type = ActionTypes.PostBack, Value = $"{r.AnswerAnswer}" });
             }
             return k;
         }

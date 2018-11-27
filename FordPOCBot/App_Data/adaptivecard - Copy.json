@@ -1,0 +1,81 @@
+﻿{
+    "type": "AdaptiveCard",
+    "body": [
+        {
+            "type": "ColumnSet",
+            "columns": [
+                {
+                    "type": "Column",
+                    "selectAction": {
+                        "type": "Action.Submit",
+                        "data": {
+                            "endofconversation": "Send Transcript"
+                        }
+                    },
+                    "items": [
+                        {
+                            "type": "Image",
+                            "backgroundColor": "#D2D2D2",
+                            "url": "https://www.digimadmedia.com/photos/digimad-message-icon-2.jpg",
+                            "size": "Medium"
+                        },
+                        {
+                            "type": "TextBlock",
+                            "text": "Send Transcript"
+                        }
+                    ],
+                    "width": "150px"
+                },
+                {
+                    "type": "Column",
+                    "width": "50px"
+                },
+                {
+                    "type": "Column",
+                    "selectAction": {
+                        "type": "Action.Submit",
+                        "data": {
+                            "endofconversation": "RateChat"
+                        }
+                    },
+                    "items": [
+                        {
+                            "type": "Image",
+                            "backgroundColor": "#D2D2D2",
+                            "url": "https://image.shutterstock.com/image-vector/appreciations-simple-icon-450w-570309358.jpg",
+                            "size": "Medium"
+                        },
+                        {
+                            "type": "TextBlock",
+                            "text": " Rate Chat"
+                        }
+                    ],
+                    "width": "150px"
+                }
+            ]
+        },
+        {
+            "type": "ColumnSet",
+            "selectAction": {
+                "type": "Action.Submit",
+                "data": {
+                    "endofconversation": "StartConversation"
+                }
+            },
+            "columns": [
+                {
+                    "type": "Column",
+                    "items": [
+                        {
+                            "type": "TextBlock",
+                            "text": "    Start Conversation"
+                        }
+                    ],
+                    "width": "stretch"
+                }
+            ]
+        }
+    ],
+    "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
+    "version": "1.0"
+}

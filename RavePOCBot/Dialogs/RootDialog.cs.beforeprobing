@@ -41,13 +41,13 @@ namespace RavePOCBot.Dialogs
             {
                 context.PrivateConversationData.SetValue(StateConstants.Intent, selectedIntent);
                 var re = context.MakeMessage();
-                re.Text = "BElow are some of the related topics";
-                var qnAResults = QnAMaker.QnAFetchter.GetAnswers("#System get #" + selectedIntent + " bot synonyms").Result;
+                re.Text = "I have solution for " + selectedIntent + " TOP call generators. Please select the relevant options from below";
+                var qnAResults = QnAMaker.QnAFetchter.GetAnswers("Get " + selectedIntent + " Bot Options").Result;
                 await context.SendTypingAcitivity();
                 ResultCard resultCard = new ResultCard();
                 resultCard.CustomQnACard(re, qnAResults);
                 await context.PostAsync(re);
-                context.Wait(HandleBotSynonyms);
+                context.Wait(HandleTopOncallGenerators);
             }
             else if (selectedIntent == null && rk.TopScoringIntent.IntentIntent.Equals("greeting") && rk.TopScoringIntent.Score > Constants.MaxLUIScore)
             {
@@ -70,13 +70,13 @@ namespace RavePOCBot.Dialogs
                 else
                 {
                     await context.SendTypingAcitivity();
-                    await this.HandleBotSynonyms(context, argument);
+                    await this.HandleTopOncallGenerators(context, argument);
                 }
             }
             else
             {
                 response.Text = others;
-                await this.HandleBotSynonyms(context, argument);
+                await this.HandleTopOncallGenerators(context, argument);
             }
         }
 
@@ -110,17 +110,16 @@ namespace RavePOCBot.Dialogs
             context.Done("completed");
         }
 
-        public async Task HandleBotSynonyms(IDialogContext context, IAwaitable<IMessageActivity> argument)
+        public async Task HandleTopOncallGenerators(IDialogContext context, IAwaitable<IMessageActivity> argument)
         {
             var response = await argument;
             await context.SendTypingAcitivity();
 
             if (!response.Text.Equals(others))
             {
-                var k = QnAMaker.QnAFetchter.GetAnswers("#System #Synonyms #ProbingQuestionsDisplay #" + response.Text).Result;
+                var k = QnAMaker.QnAFetchter.GetAnswers(response.Text).Result;
                 if (k.Answers!=null && k.Answers[0].Score > Constants.MaxQNAScore)
                 {
-                    context.PrivateConversationData.SetValue<string>(StateConstants.TopicSynonym, response.Text);
                     await context.PostAsync(k.Answers[0].AnswerAnswer);
                 }
                 else
@@ -151,7 +150,30 @@ namespace RavePOCBot.Dialogs
         private static string doYouWantMore = "No, Issue is not resolved";
 
         private static string[] issueSolvedCardAction = new string[] { issueResolved, doYouWantMore };
-        
+
+        private async Task CustomSearch(IDialogContext context, string text)
+        {
+            var subscriptionKey = System.Configuration.ConfigurationManager.AppSettings["BingCustomSearchKey"];
+            var customConfigId = System.Configuration.ConfigurationManager.AppSettings["BingConfigId"];
+            var searchTerm = text;
+
+            var url = "https://api.cognitive.microsoft.com/bingcustomsearch/v7.0/search?" +
+                "q=" + searchTerm +
+                "&customconfig=" + customConfigId;
+
+            var client = new HttpClient();
+            client.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Key", subscriptionKey);
+            var httpResponseMessage = client.GetAsync(url).Result;
+            var responseContent = httpResponseMessage.Content.ReadAsStringAsync().Result;
+            BingCustomSearchResponse response = JsonConvert.DeserializeObject<BingCustomSearchResponse>(responseContent);
+
+            ResultCard resultCard = new ResultCard();
+
+            IMessageActivity msg = context.MakeMessage();
+            resultCard.CustomCard(msg, response.webPages);
+            await context.PostAsync(msg);
+        }
+
         private async Task DoYouWantMoreQna(IDialogContext context, IAwaitable<IMessageActivity> result)
         {
             var response = await result;
@@ -162,55 +184,14 @@ namespace RavePOCBot.Dialogs
                 return;
             }
 
-            
             await context.SendTypingAcitivity();
 
+            await this.CustomSearch(context, context.PrivateConversationData.GetValue<string>(StateConstants.IntentQuery));
+
             ResultCard resultCard = new ResultCard();
-            await resultCard.PostAsyncWithConvertToOptionsCard(context, "Do you have answers to all the questions displayed earlier", new string[] { "Start Interactive Session" });
-            context.Wait(StartInteractiveQuestion);
+            await resultCard.PostAsyncWithConvertToOptionsCard(context, "We have suggested possible options", issueSolvedCardAction);
 
-
-            //ResultCard resultCard = new ResultCard();
-            //await resultCard.PostAsyncWithConvertToOptionsCard(context, "We have suggested possible options", issueSolvedCardAction);
-
-            //context.Wait(this.Completed);
-        }
-
-        private async Task StartInteractiveQuestion(IDialogContext context, IAwaitable<IMessageActivity> result)
-        {
-            var questionairre = QnAMaker.QnAFetchter.GetAnswers("#System #InteractiveQuestionsDisplay #" + context.PrivateConversationData.GetValue<string>(StateConstants.TopicSynonym)).Result.Answers[0].AnswerAnswer;
-            
-            if (context.PrivateConversationData.ContainsKey(StateConstants.TopicSynonymInteractiveQuestion))
-            {
-                var l = context.PrivateConversationData.GetValue<string>(StateConstants.TopicSynonymInteractiveQuestion);
-                //questionairre -l;
-                var res = questionairre.Replace(l, string.Empty).Split(new string[] { StateConstants.QuestionairreSeparator }, StringSplitOptions.RemoveEmptyEntries);
-
-                if(res == null || res.Length == 0)
-                {
-                    ResultCard resultCard = new ResultCard();
-                    await context.PostAsync("THANK YOU FOR YOUR TIME, BASED ON YOUR ANSWERS I CAN SUGGEST YOU THE BELOW SOLUTION");
-                    var intentQueryAnswer = QnAMaker.QnAFetchter.
-                        GetAnswers(context.PrivateConversationData.GetValue<string>(StateConstants.IntentQuery)).Result.Answers[0].AnswerAnswer;
-                    await context.PostAsync(intentQueryAnswer);
-                    await resultCard.PostAsyncWithConvertToOptionsCard(context, "We have suggested possible options", issueSolvedCardAction);
-                    context.Wait(this.Completed);
-                    return;
-                }
-
-                context.PrivateConversationData.SetValue<string>(StateConstants.TopicSynonymInteractiveQuestion, l + StateConstants.QuestionairreSeparator + res[0]);
-                await context.PostAsync(res[0]);
-                context.Wait(StartInteractiveQuestion);
-
-            }
-            else
-            {
-                await context.PostAsync("Starting interactive session");
-                var k = questionairre.Split(new string[] { StateConstants.QuestionairreSeparator }, StringSplitOptions.RemoveEmptyEntries);
-                context.PrivateConversationData.SetValue<string>(StateConstants.TopicSynonymInteractiveQuestion, k[0]);
-                await context.PostAsync(k[0]);
-                context.Wait(StartInteractiveQuestion);
-            }
+            context.Wait(this.Completed);
         }
 
         private async Task Completed(IDialogContext context, IAwaitable<IMessageActivity> result)

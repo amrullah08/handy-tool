@@ -25,3 +25,11 @@
 /RavePOCBot/packages
 /RavePOCBot/Properties/PublishProfiles
 /ExcelFileReader/.vs/CsvHelper/v15
+
+/**/.dll
+/**/.vs
+/**/packages
+/**/bin
+/**/obj
+/FordPOCBot/Properties/PublishProfiles
+
