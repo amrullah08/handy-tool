@@ -36,7 +36,7 @@ namespace FordPOCBot.Cards
                                 {
                                     new AdaptiveImage()
                                     {
-                                        Size= AdaptiveImageSize.Auto,
+                                        Size= AdaptiveImageSize.Medium,
                                         Url = new Uri("https://pbs.twimg.com/profile_images/892474147569377281/e60htCEm_400x400.jpg")
                                     }
                                 }
@@ -51,13 +51,13 @@ namespace FordPOCBot.Cards
                                     {
                                         Text = FordResources.GreetUser,
                                         Weight = AdaptiveTextWeight.Bolder,
-                                        Wrap = true
+                                        Wrap = true,
+                                        Size = AdaptiveTextSize.Medium
                                     },
                                     new AdaptiveTextBlock()
                                     {
                                         Text = FordResources.BotGreeting,
                                         Weight = AdaptiveTextWeight.Bolder,
-                                        Size = AdaptiveTextSize.Small,
                                         Wrap = true
                                     }
                                 }
