@@ -36,7 +36,7 @@ namespace FordPOCBot.Cards
                                 {
                                     new AdaptiveImage()
                                     {
-                                        Size= AdaptiveImageSize.Auto,
+                                        Size= AdaptiveImageSize.Medium,
                                         Url = new Uri("https://pbs.twimg.com/profile_images/892474147569377281/e60htCEm_400x400.jpg")
                                     }
                                 }
@@ -51,13 +51,13 @@ namespace FordPOCBot.Cards
                                     {
                                         Text = FordResources.GreetUser,
                                         Weight = AdaptiveTextWeight.Bolder,
-                                        Wrap = true
+                                        Wrap = true,
+                                        Size = AdaptiveTextSize.Medium
                                     },
                                     new AdaptiveTextBlock()
                                     {
                                         Text = FordResources.BotGreeting,
                                         Weight = AdaptiveTextWeight.Bolder,
-                                        Size = AdaptiveTextSize.Small,
                                         Wrap = true
                                     }
                                 }
@@ -216,26 +216,36 @@ namespace FordPOCBot.Cards
             var re = context.MakeMessage();
             if (!string.IsNullOrEmpty(title))
                 re.Text = title;
-            this.ConvertToOptionsCard(re, options);
+            this.ConvertToOptionsCard(re, options, null);
             await context.PostAsync(re);
         }
 
-        public void ConvertToOptionsCard(IMessageActivity message, string[] options)
+        public void ConvertToOptionsCard(IMessageActivity message, string[] options,string[] urls)
         {
             message.AttachmentLayout = AttachmentLayoutTypes.Carousel;
             message.Attachments = new List<Attachment>();
 
+            int i = 0;
+
             foreach (var cardContent in options)
             {
-                List<AdaptiveElement> items = new List<AdaptiveElement>();
+                List<AdaptiveElement> items = new List<AdaptiveElement>(){
+                                    new AdaptiveImage()
+                                    {
+                                        Size= AdaptiveImageSize.Medium,
+                                        Url = new Uri(urls[i])
+                                    }
+                                };
+
 
                 AdaptiveCard card = new AdaptiveCard()
                 {
-                    Body = items
+                    Body = items,
+                    BackgroundImage = new Uri(urls[i++])
                 };
                 card.Actions.Add(new AdaptiveSubmitAction()
                 {
-                    Title = cardContent,
+                    Title = "",//cardContent,
                     Data = cardContent
                 });
                 Attachment attachment = new Attachment()

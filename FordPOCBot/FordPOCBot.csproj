@@ -216,8 +216,12 @@
   <ItemGroup>
     <Content Include="App_Data\adaptivecard - Copy.json" />
     <None Include="App_Data\adaptivecard.json" />
+    <Content Include="Content\criticalthinking.png" />
     <Content Include="Content\custom.css" />
+    <Content Include="Content\designthinking.png" />
     <Content Include="Content\static.en.b-blessed1.css" />
+    <Content Include="Content\systemthinking.png" />
+    <Content Include="Content\welcome.png" />
     <Content Include="default1.htm" />
     <Content Include="default.htm" />
     <Content Include="Global.asax" />

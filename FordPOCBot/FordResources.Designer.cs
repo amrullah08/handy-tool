@@ -72,7 +72,7 @@ namespace FordPOCBot {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Hi Syed! Good Evening!.
+        ///   Looks up a localized string similar to Hi Fei! Good Evening!.
         /// </summary>
         internal static string GreetUser {
             get {

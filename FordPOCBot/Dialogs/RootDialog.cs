@@ -39,11 +39,11 @@ namespace FordPOCBot.Dialogs
             Result.Answers[0].AnswerAnswer;
                     MediaUrl mediaUrl = new MediaUrl("https://marczak.io/images/botseries-rich-cards/CreatingBot.mp4");
                     await context.PostAsync(answer);
-                    var k = ResultCard.GetVideoCard("Welcome to Leadership Learning Site", "", "Ford HR ", mediaUrl);
-                    var reply = context.MakeMessage();
-                    reply.Attachments = new List<Attachment>();
-                    reply.Attachments.Add(k);
-                    await context.PostAsync(reply);
+                    //var k = ResultCard.GetVideoCard("Welcome to Leadership Learning Site", "", "Ford HR ", mediaUrl);
+                    //var reply = context.MakeMessage();
+                    //reply.Attachments = new List<Attachment>();
+                    //reply.Attachments.Add(k);
+                    //await context.PostAsync(reply);
                     context.Done("competed");
                     break;
                 case "FordCurrentAffair":
@@ -51,7 +51,7 @@ namespace FordPOCBot.Dialogs
             Result.Answers[0].AnswerAnswer;
                     await context.PostAsync(answer);
                     ResultCard result = new ResultCard();
-                    reply = context.MakeMessage();
+                    var reply = context.MakeMessage();
                     reply.Text = "Would you like to learn more?";
                     reply.SuggestedActions = ResultCard.GetSuggestedQnAActions(new[] { "yes", "no" });
                     await context.PostAsync(reply);
@@ -60,7 +60,7 @@ namespace FordPOCBot.Dialogs
                 case "FordModels":
                     ResultCard resultCard = new ResultCard();
                     reply = context.MakeMessage();
-                    resultCard.ConvertToOptionsCard(reply, new[] { "Critical Thinking", "Design Thinking", "System Thinking" });
+                    resultCard.ConvertToOptionsCard(reply, new[] { "Critical Thinking", "Design Thinking", "System Thinking" }, new[] { "http://syedamrullahravepoc.azurewebsites.net/content/criticalthinking.png", "http://syedamrullahravepoc.azurewebsites.net/content/designthinking.png", "http://syedamrullahravepoc.azurewebsites.net/content/systemthinking.png" });
                     await context.PostAsync(reply);
                     context.Wait(FordModelSelection);
                     break;
