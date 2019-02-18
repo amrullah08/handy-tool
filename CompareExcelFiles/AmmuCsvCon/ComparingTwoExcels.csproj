@@ -53,9 +53,10 @@
     <Compile Include="CompareExcels.cs" />
     <Compile Include="ComparingFile.cs" />
     <Compile Include="ConfigurationConstants.cs" />
+    <Compile Include="SequenceInfo.cs" />
+    <Compile Include="SequenceInterface.cs" />
     <Compile Include="SourceExcel.cs" />
     <None Include="backup.deprecated" />
-    <Compile Include="ILocation.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
